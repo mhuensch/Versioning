@@ -17,7 +17,7 @@ namespace Run00.Versioning.Sequence
 
 			//The revision should always be incremented.
 			var revision = previousVersion.Revision + 1;
-			var differ = new AssemblyDiffer(previousDll, currentDll);
+			var differ = new AssemblyDiffer(currentDll, previousDll);
 			var diffs = differ.GenerateTypeDiff(QueryAggregator.PublicApiQueries);
 
 			if (diffs.AddedRemovedTypes.RemovedCount > 0)
@@ -28,18 +28,23 @@ namespace Run00.Versioning.Sequence
 
 			var previousAss = AssemblyFactory.GetAssembly(previousDll);
 			var currentAss = AssemblyFactory.GetAssembly(currentDll);
+			var minorChangeFound = false;
 			foreach (var type in previousAss.MainModule.Types.Cast<TypeDefinition>())
 			{
 				var x = type as TypeDefinition;
 				var cType = currentAss.MainModule.Types.Cast<TypeDefinition>().Single(c => c.FullName == type.FullName);
-				var differ2 = TypeDiff.GenerateDiff(type, cType, QueryAggregator.PublicApiQueries);
+				var differ2 = TypeDiff.GenerateDiff(cType, type, QueryAggregator.PublicApiQueries);
 
-				if (differ2.Methods.Where(m => m.Operation.IsRemoved).Count() > 0)
+				if (differ2.Methods.Any(m => m.Operation.IsRemoved) || differ2.Fields.Any(m => m.Operation.IsRemoved) || differ2.Events.Any(m => m.Operation.IsRemoved))
 					return new Version(previousVersion.Major + 1, 0, 0, revision);
 
-				if (differ2.Methods.Where(m => m.Operation.IsAdded).Count() > 0)
-					return new Version(previousVersion.Major, previousVersion.Minor + 1, 0, revision);
+				if (differ2.Methods.Any(m => m.Operation.IsAdded) || differ2.Fields.Any(m => m.Operation.IsAdded) || differ2.Events.Any(m => m.Operation.IsAdded))
+					minorChangeFound = true;
 			}
+
+			if (minorChangeFound)
+				return new Version(previousVersion.Major, previousVersion.Minor + 1, 0, revision);
+
 
 			//If there were no other changes, increment the build version
 			return new Version(previousVersion.Major, previousVersion.Minor, previousVersion.Build + 1, revision);

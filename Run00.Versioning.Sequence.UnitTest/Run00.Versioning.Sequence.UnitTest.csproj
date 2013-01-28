@@ -62,9 +62,29 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp.csproj">
+      <Project>{65fe7716-5c27-444e-babb-9a341c0c19ee}</Project>
+      <Name>Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp.csproj">
+      <Project>{02330a09-9b12-4d08-96e7-95c8bc10a4c2}</Project>
+      <Name>Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.ComplexArtifact\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.csproj">
+      <Project>{f7cb9b38-76fd-4c75-a65d-b06315710e0c}</Project>
+      <Name>Run00.Versioning.Sequence.UnitTest.ComplexArtifact</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class.csproj">
+      <Project>{e26ccb73-08f0-4b44-9d1f-b1422eea5741}</Project>
+      <Name>Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Param\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Param.csproj">
       <Project>{10f87a1f-9ee6-4eb0-8cc3-0ed46359ea8f}</Project>
       <Name>Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Param</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop.csproj">
+      <Project>{3865f2ed-96f9-4119-80e6-9cb39cef60d0}</Project>
+      <Name>Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Param\Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Param.csproj">
       <Project>{c85b5755-f090-4d18-b295-b05063bdb9e1}</Project>

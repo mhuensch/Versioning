@@ -1,12 +1,12 @@
 ﻿namespace Run00.Versioning.Sequence.UnitTest.SimpleArtifact
 {
-	public class SimpleClass
+	public class ComplexResult
 	{
 		public string PropertyOne { get; set; }
 
-		public string HelloWorld(string value, int valueToo)
+		public string MyMethod(string value)
 		{
-			return "Hello World!";
+			return "Random Value";
 		}
 	}
 }

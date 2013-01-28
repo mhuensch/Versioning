@@ -3,8 +3,9 @@
 	public class SimpleClass
 	{
 		public string PropertyOne { get; set; }
+		public string PropertyTwo { get; set; }
 
-		public string HelloWorld(string value, int valueToo)
+		public string HelloWorld(string value)
 		{
 			return "Hello World!";
 		}

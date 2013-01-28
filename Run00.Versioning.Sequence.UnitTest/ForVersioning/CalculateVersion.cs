@@ -14,6 +14,11 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Param.dll")]
 	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Result.dll")]
 	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Param.dll")]
+	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop.dll")]
+	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class.dll")]
+	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.ComplexArtifact.dll")]
+	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp.dll")]
+	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp.dll")]
 	public class CalculateVersion
 	{
 		[TestMethod, CategorizeByConvention]
@@ -154,6 +159,70 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, methodPath);
+
+			//Assert
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod, CategorizeByConvention]
+		public void WhenUsingAssemblyWithPropertyAddition_ShouldReturnIncrementedMinorAndRevisionVersion()
+		{
+			//Arrange
+			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
+			var propPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop.dll";
+			var expected = new Version(1, 1, 0, 26);
+			var calculator = new VersionCalculator() as IVersionCalculator;
+
+			//Act
+			var result = calculator.Calculate(simpleAssemblyPath, propPath);
+
+			//Assert
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod, CategorizeByConvention]
+		public void WhenUsingAssemblyWithClassAddition_ShouldReturnIncrementedMinorAndRevisionVersion()
+		{
+			//Arrange
+			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
+			var propPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class.dll";
+			var expected = new Version(1, 1, 0, 26);
+			var calculator = new VersionCalculator() as IVersionCalculator;
+
+			//Act
+			var result = calculator.Calculate(simpleAssemblyPath, propPath);
+
+			//Assert
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod, CategorizeByConvention]
+		public void WhenUsingAssemblyWithResultClassPropAddition_ShouldReturnIncrementedMinorAndRevisionVersion()
+		{
+			//Arrange
+			var complexPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.dll";
+			var propPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp.dll";
+			var expected = new Version(1, 1, 0, 26);
+			var calculator = new VersionCalculator() as IVersionCalculator;
+
+			//Act
+			var result = calculator.Calculate(complexPath, propPath);
+
+			//Assert
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod, CategorizeByConvention]
+		public void WhenUsingAssemblyWithResultClassPropRename_ShouldReturnIncrementedMajorAndRevisionVersion()
+		{
+			//Arrange
+			var complexPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.dll";
+			var propPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp.dll";
+			var expected = new Version(2, 0, 0, 26);
+			var calculator = new VersionCalculator() as IVersionCalculator;
+
+			//Act
+			var result = calculator.Calculate(complexPath, propPath);
 
 			//Assert
 			Assert.AreEqual(expected, result);
