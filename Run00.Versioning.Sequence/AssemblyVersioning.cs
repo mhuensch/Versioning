@@ -3,12 +3,13 @@ using Mono.Cecil;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Run00.Versioning.Sequence
 {
-	public class VersionCalculator : IVersionCalculator
+	public class AssemblyVersioning : IAssemblyVersioning
 	{
-		Version IVersionCalculator.Calculate(string currentDll, string previousDll)
+		Version IAssemblyVersioning.Calculate(string currentDll, string previousDll)
 		{
 			var current = Assembly.ReflectionOnlyLoadFrom(currentDll);
 			var previous = Assembly.ReflectionOnlyLoadFrom(previousDll);
@@ -48,6 +49,13 @@ namespace Run00.Versioning.Sequence
 
 			//If there were no other changes, increment the build version
 			return new Version(previousVersion.Major, previousVersion.Minor, previousVersion.Build + 1, revision);
+		}
+
+		string IAssemblyVersioning.UpdateAssemblyInfo(string fileContents, string version)
+		{
+			string pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+			string result = Regex.Replace(fileContents, pattern, "[assembly: AssemblyVersion(\"" + version + "\")]");
+			return result;
 		}
 	}
 }

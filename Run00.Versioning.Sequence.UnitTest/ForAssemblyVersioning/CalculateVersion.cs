@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Run00.MsTest;
 using System;
+using System.Text.RegularExpressions;
 
-namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
+namespace Run00.Versioning.Sequence.UnitTest.ForAssemblyVersioning
 {
 	[TestClass, CategorizeByConventionClass(typeof(CalculateVersion))]
 	[DeploymentItem("Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll")]
@@ -27,7 +28,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			//Arrange
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var expected = new Version(1, 0, 1, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, simpleAssemblyPath);
@@ -43,7 +44,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var copyAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifactCopy.dll";
 			var expected = new Version(1, 0, 1, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, copyAssemblyPath);
@@ -59,7 +60,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var copyAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifactRevision.dll";
 			var expected = new Version(1, 0, 1, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, copyAssemblyPath);
@@ -75,7 +76,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var namespacePath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Rename.Namespace.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, namespacePath);
@@ -91,7 +92,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var classPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Rename.Class.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, classPath);
@@ -107,7 +108,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var methodPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Rename.Method.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, methodPath);
@@ -123,7 +124,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var methodPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Param.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, methodPath);
@@ -139,7 +140,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var methodPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Change.Result.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, methodPath);
@@ -155,7 +156,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var methodPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Param.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, methodPath);
@@ -171,7 +172,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var propPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Prop.dll";
 			var expected = new Version(1, 1, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, propPath);
@@ -187,7 +188,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var simpleAssemblyPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.dll";
 			var propPath = "Run00.Versioning.Sequence.UnitTest.SimpleArtifact.Add.Class.dll";
 			var expected = new Version(1, 1, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(simpleAssemblyPath, propPath);
@@ -203,7 +204,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var complexPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.dll";
 			var propPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.AddProp.dll";
 			var expected = new Version(1, 1, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(complexPath, propPath);
@@ -219,7 +220,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			var complexPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.dll";
 			var propPath = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp.dll";
 			var expected = new Version(2, 0, 0, 26);
-			var calculator = new VersionCalculator() as IVersionCalculator;
+			var calculator = new AssemblyVersioning() as IAssemblyVersioning;
 
 			//Act
 			var result = calculator.Calculate(complexPath, propPath);
@@ -227,5 +228,7 @@ namespace Run00.Versioning.Sequence.UnitTest.ForVersioning
 			//Assert
 			Assert.AreEqual(expected, result);
 		}
+
+
 	}
 }

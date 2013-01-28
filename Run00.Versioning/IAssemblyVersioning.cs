@@ -2,8 +2,9 @@
 
 namespace Run00.Versioning
 {
-	public interface IVersionCalculator
+	public interface IAssemblyVersioning
 	{
 		Version Calculate(string currentDll, string previousDll);
+		string UpdateAssemblyInfo(string fileContents, string version);
 	}
 }

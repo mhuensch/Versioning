@@ -55,7 +55,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ForVersioning\CalculateVersion.cs" />
+    <Compile Include="ForAssemblyVersioning\CalculateVersion.cs" />
+    <Compile Include="ForAssemblyVersioning\UpdateAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
