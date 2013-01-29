@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Sequence.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp", "Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp\Run00.Versioning.Sequence.UnitTest.ComplexArtifact.RenameProp.csproj", "{02330A09-9B12-4D08-96E7-95C8BC10A4C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.WindowsConsole", "Run00.Versioning.WindowsConsole\Run00.Versioning.WindowsConsole.csproj", "{8C453F2B-DC44-4D9B-A80B-7ADEC06BED2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{02330A09-9B12-4D08-96E7-95C8BC10A4C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02330A09-9B12-4D08-96E7-95C8BC10A4C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02330A09-9B12-4D08-96E7-95C8BC10A4C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C453F2B-DC44-4D9B-A80B-7ADEC06BED2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C453F2B-DC44-4D9B-A80B-7ADEC06BED2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C453F2B-DC44-4D9B-A80B-7ADEC06BED2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C453F2B-DC44-4D9B-A80B-7ADEC06BED2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

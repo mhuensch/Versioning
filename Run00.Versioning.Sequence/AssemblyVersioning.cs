@@ -1,6 +1,7 @@
 ﻿using ApiChange.Api.Introspection;
 using Mono.Cecil;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -51,11 +52,20 @@ namespace Run00.Versioning.Sequence
 			return new Version(previousVersion.Major, previousVersion.Minor, previousVersion.Build + 1, revision);
 		}
 
-		string IAssemblyVersioning.UpdateAssemblyInfo(string fileContents, string version)
+		void IAssemblyVersioning.UpdateAssemblyInfo(Stream assemblyInfoFile, Version version)
 		{
-			string pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
-			string result = Regex.Replace(fileContents, pattern, "[assembly: AssemblyVersion(\"" + version + "\")]");
-			return result;
+			var pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+			var replaceWith = "[assembly: AssemblyVersion(\"" + version + "\")]";
+
+			var reader = new StreamReader(assemblyInfoFile);
+			assemblyInfoFile.Seek(0, SeekOrigin.Begin);
+			var contents = reader.ReadToEnd();
+			var newContents = Regex.Replace(contents, pattern, replaceWith);
+
+			assemblyInfoFile.Seek(0, SeekOrigin.Begin);
+			var writer = new StreamWriter(assemblyInfoFile);
+			writer.Write(newContents);
+			writer.Flush();
 		}
 	}
 }

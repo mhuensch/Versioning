@@ -37,6 +37,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\Mock\Run00.Mock\bin\Debug\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Run00.Configuration">
+      <HintPath>..\..\Configuration\Run00.Configuration\bin\Debug\Run00.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Run00.FileSystem, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Run00.FileSystem.1.1.2\lib\Run00.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Run00.Mock">
+      <HintPath>..\..\Mock\Run00.Mock\bin\Debug\Run00.Mock.dll</HintPath>
+    </Reference>
     <Reference Include="Run00.MsTest">
       <HintPath>..\packages\Run00.MsTest.0.10.10\lib\Run00.MsTest.dll</HintPath>
     </Reference>
