@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Run00.Mock;
 using Run00.MsTest;
 using System;
@@ -15,9 +14,9 @@ namespace Run00.Versioning.Sequence.UnitTest.ForAssemblyVersioning
 		public void WhenGivenInfoContent_ShouldUpdateAssemblyVersion()
 		{
 			//Arrange
-			var expected = @"[assembly: AssemblyFileVersion(""1.0.0.0"")] [assembly: AssemblyVersion(""1.2.3.4"")]";
+			var expected = @"[assembly: AssemblyFileVersion(""1.2.3.4"")]\r\n[assembly: AssemblyVersion(""1.2.3.4"")]\r\n[assembly: CLSCompliant(true)]";
 			var version = new Version("1.2.3.4");
-			var bytes = Encoding.UTF8.GetBytes(@"[assembly: AssemblyFileVersion(""1.0.0.0"")] [assembly: AssemblyVersion(""1.0.0.0"")]");
+			var bytes = Encoding.UTF8.GetBytes(@"[assembly: AssemblyFileVersion(""1.0.0.0"")]\r\n[assembly: AssemblyVersion(""1.0.0.0"")]\r\n[assembly: CLSCompliant(true)]");
 
 			var stream = new MemoryStream();
 			stream.Write(bytes, 0, bytes.Length);

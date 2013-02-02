@@ -12,9 +12,15 @@ namespace Run00.Versioning.WindowsConsole
 	{
 		static void Main(string[] args)
 		{
-			var assembly = Assembly.ReflectionOnlyLoad(args[0]);
-
+			var assemblyPath = args[0]; //@"C:\TeamCity\buildAgent\work\498206cac5de9896\Run00.Configuration\bin\Release\Run00.Configuration.dll";
+			var previousPath = @"C:\TeamCity\Run00.Versioning\store\" + Path.GetFileName(assemblyPath);
+			var workingFolder = Directory.GetParent(Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(assemblyPath)).FullName).FullName).FullName;
 			var workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+			Console.WriteLine("assemblyPath" + assemblyPath);
+			Console.WriteLine("previousPath" + previousPath);
+			Console.WriteLine("workingFolder" + workingFolder);
+			Console.WriteLine("workingDirectory" + workingDirectory);
 
 			_container = new WindsorContainer();
 			_container.Kernel.Resolver.AddSubResolver(new ArrayResolver(_container.Kernel, true));
@@ -27,16 +33,26 @@ namespace Run00.Versioning.WindowsConsole
 			try
 			{
 				assemblyVersioning = _container.Resolve<IAssemblyVersioning>();
-				var version = assemblyVersioning.Calculate(args[0], args[1]);
-				foreach (var file in Directory.GetFiles(args[3], "AssemblyInfo.cs", SearchOption.AllDirectories))
+				if (File.Exists(previousPath) == false)
+					previousPath = string.Empty;
+
+				var version = assemblyVersioning.Calculate(assemblyPath, previousPath);
+				Console.WriteLine("Calculated Version:" + version);
+
+				foreach (var file in Directory.GetFiles(workingFolder, "AssemblyInfo.cs", SearchOption.AllDirectories))
 				{
-					var stream = new FileStream(file, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-					assemblyVersioning.UpdateAssemblyInfo(stream, version);
+					var contents = string.Empty;
+					using (var stream = new FileStream(file, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+					{
+						contents = assemblyVersioning.UpdateAssemblyInfo(stream, version);
+					}
+					File.WriteAllText(file, contents);
 				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.ToString());
+				throw;
 			}
 			finally
 			{

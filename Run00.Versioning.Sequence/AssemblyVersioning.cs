@@ -1,9 +1,9 @@
 ﻿using ApiChange.Api.Introspection;
 using Mono.Cecil;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Run00.Versioning.Sequence
@@ -12,10 +12,14 @@ namespace Run00.Versioning.Sequence
 	{
 		Version IAssemblyVersioning.Calculate(string currentDll, string previousDll)
 		{
-			var current = Assembly.ReflectionOnlyLoadFrom(currentDll);
-			var previous = Assembly.ReflectionOnlyLoadFrom(previousDll);
+			var currentAss = AssemblyFactory.GetAssembly(currentDll);
+			if (string.IsNullOrEmpty(previousDll))
+				return currentAss.Name.Version;
 
-			var previousVersion = previous.GetName().Version;
+
+			var version = FileVersionInfo.GetVersionInfo(currentDll);
+			var previousAss = AssemblyFactory.GetAssembly(previousDll);
+			var previousVersion = previousAss.Name.Version;
 
 			//The revision should always be incremented.
 			var revision = previousVersion.Revision + 1;
@@ -28,8 +32,6 @@ namespace Run00.Versioning.Sequence
 			if (diffs.AddedRemovedTypes.AddedCount > 0)
 				return new Version(previousVersion.Major, previousVersion.Minor + 1, 0, revision);
 
-			var previousAss = AssemblyFactory.GetAssembly(previousDll);
-			var currentAss = AssemblyFactory.GetAssembly(currentDll);
 			var minorChangeFound = false;
 			foreach (var type in previousAss.MainModule.Types.Cast<TypeDefinition>())
 			{
@@ -52,20 +54,21 @@ namespace Run00.Versioning.Sequence
 			return new Version(previousVersion.Major, previousVersion.Minor, previousVersion.Build + 1, revision);
 		}
 
-		void IAssemblyVersioning.UpdateAssemblyInfo(Stream assemblyInfoFile, Version version)
+		string IAssemblyVersioning.UpdateAssemblyInfo(Stream assemblyInfoFile, Version version)
 		{
-			var pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
-			var replaceWith = "[assembly: AssemblyVersion(\"" + version + "\")]";
-
 			var reader = new StreamReader(assemblyInfoFile);
 			assemblyInfoFile.Seek(0, SeekOrigin.Begin);
 			var contents = reader.ReadToEnd();
+
+			var pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+			var replaceWith = "[assembly: AssemblyVersion(\"" + version + "\")]";
 			var newContents = Regex.Replace(contents, pattern, replaceWith);
 
-			assemblyInfoFile.Seek(0, SeekOrigin.Begin);
-			var writer = new StreamWriter(assemblyInfoFile);
-			writer.Write(newContents);
-			writer.Flush();
+			pattern = @"\[assembly\: AssemblyFileVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+			replaceWith = "[assembly: AssemblyFileVersion(\"" + version + "\")]";
+			newContents = Regex.Replace(newContents, pattern, replaceWith);
+
+			return newContents;
 		}
 	}
 }
