@@ -77,6 +77,10 @@
     <Compile Include="Rules\AccessibilityRule.cs" />
     <Compile Include="Rules\AbstractionRule.cs" />
     <Compile Include="Rules\ChildCountRule.cs" />
+    <Compile Include="Rules\PropertyTypeRule.cs" />
+    <Compile Include="Rules\MethodParameterTypeRule.cs" />
+    <Compile Include="Rules\MethodParameterCountRule.cs" />
+    <Compile Include="Rules\MethodReturnTypeRule.cs" />
     <Compile Include="Rules\VirtualRule.cs" />
     <Compile Include="Rules\StaticRule.cs" />
     <Compile Include="Rules\SealingRule.cs" />
