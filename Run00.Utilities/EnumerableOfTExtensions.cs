@@ -24,5 +24,18 @@ namespace Run00.Utilities
 
 			return join;
 		}
+
+		public static IEnumerable<TR> FullOuterJoin<T, TR>(this IEnumerable<T> a, IEnumerable<T> b, Func<T, T, bool> comparison, Func<T, T, TR> projection)
+		{
+			var bCopy = b.ToList();
+
+			var x =
+				from aItem in a
+				let bMatch = bCopy.SingleOrDefault(bj => comparison(aItem, bj))
+				let unused = bCopy.Remove(bMatch)
+				select projection(aItem, bMatch);
+
+			return x.Union(bCopy.Select(bb => projection(default(T), bb)));
+		}
 	}
 }

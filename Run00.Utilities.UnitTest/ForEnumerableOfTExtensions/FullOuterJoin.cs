@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Run00.MsTest;
 using Run00.Utilities.UnitTest.Artifacts;
 using System.Linq;

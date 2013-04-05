@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SolutionLinkerResult.cs" />
     <Compile Include="LinkFactoryForAssembly.cs" />
     <Compile Include="LinkFactoryForType.cs" />
     <Compile Include="LinkFactoryForMethod.cs" />

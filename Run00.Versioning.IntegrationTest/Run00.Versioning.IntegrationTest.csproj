@@ -86,6 +86,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Content Include="Artifacts\Refactor\Test.Sample.sln" />
+    <Content Include="Artifacts\Refactor\Test.Sample\IOrderService.cs" />
+    <Content Include="Artifacts\Refactor\Test.Sample\LineItem.cs" />
+    <Content Include="Artifacts\Refactor\Test.Sample\Order.cs" />
+    <Content Include="Artifacts\Refactor\Test.Sample\OrderService.cs" />
+    <Content Include="Artifacts\Refactor\Test.Sample\Properties\AssemblyInfo.cs" />
     <Compile Include="RoslynReferenceHack.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\IOrderService.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\LineItem.cs" />
@@ -97,6 +103,7 @@
     <Content Include="Artifacts\ControlGroup\Test.Sample\Order.cs" />
     <Content Include="Artifacts\ControlGroup\Test.Sample\OrderService.cs" />
     <Content Include="Artifacts\ControlGroup\Test.Sample\Properties\AssemblyInfo.cs" />
+    <Content Include="Artifacts\Refactor\Test.Sample\Test.Sample.csproj" />
     <Content Include="Artifacts\Deleted\Test.Sample\IOrderService.cs" />
     <Content Include="Artifacts\Deleted\Test.Sample\Order.cs" />
     <Content Include="Artifacts\Deleted\Test.Sample\OrderService.cs" />
@@ -120,6 +127,10 @@
     <ProjectReference Include="..\Run00.Versioning.Compare\Run00.Versioning.Link.csproj">
       <Project>{1fb800bb-f364-4bb4-9a9a-461e3e13d91a}</Project>
       <Name>Run00.Versioning.Link</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Extensions\Run00.Versioning.Extensions.csproj">
+      <Project>{4cbdbed7-e14e-42bb-b6f7-59ddfca8c240}</Project>
+      <Name>Run00.Versioning.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning\Run00.Versioning.csproj">
       <Project>{a75ff0ca-3aa8-4fc4-843a-6d63d2da0fd2}</Project>
