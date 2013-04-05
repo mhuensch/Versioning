@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Run00.Versioning.Compare
+namespace Run00.Versioning.Link
 {
-	public interface ISymbolComparisonFactory<T> where T : ISymbol
+	public interface ISymbolLinkFactory<T> where T : ISymbol
 	{
-		ISymbolComparison Compare(T original, T compareTo);
+		ISymbolLink Link(T original, T compareTo);
 	}
 }

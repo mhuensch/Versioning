@@ -4,10 +4,8 @@ using Castle.Windsor.Installer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Roslyn.Services;
 using Run00.MsTest;
-using Run00.Versioning.Compare;
 using System.IO;
 using System.Linq;
-using Run00.Utilities;
 
 namespace Run00.Versioning.IntegrationTest
 {
@@ -25,15 +23,12 @@ namespace Run00.Versioning.IntegrationTest
 			var container = new WindsorContainer();
 			container.Install(FromAssembly.InDirectory(new AssemblyFilter(Directory.GetCurrentDirectory())));
 
-			var comparison = container.Resolve<SolutionComparison>();
+
+			var linker = container.Resolve<SolutionChangeCalculator>();
 
 			//Act
-			var result = comparison.Compare(controlGroup, testGroup);
-			var test = result.First().RollUp();
-			//var max = result.Children.Max(c => c.ChangeType);
-
-			//Assert
-			Assert.AreEqual(ContractChangeType.None, result);
+			var assemblyLinks = linker.GetChanges(controlGroup, testGroup);
+			var symbolLinks = assemblyLinks.First().Changes;
 		}
 
 

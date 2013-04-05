@@ -7,8 +7,8 @@
     <ProjectGuid>{1FB800BB-F364-4BB4-9A9A-461E3E13D91A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Run00.Versioning.Compare</RootNamespace>
-    <AssemblyName>Run00.Versioning.Compare</AssemblyName>
+    <RootNamespace>Run00.Versioning.Link</RootNamespace>
+    <AssemblyName>Run00.Versioning.Link</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -68,18 +68,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContractChange.cs" />
-    <Compile Include="ContractChangeType.cs" />
-    <Compile Include="ComparisonFactoryForAssembly.cs" />
-    <Compile Include="ComparisonFactoryForType.cs" />
-    <Compile Include="ComparisonFactoryForMethod.cs" />
-    <Compile Include="ComparisonFactoryForProperty.cs" />
-    <Compile Include="SymbolChangeCalculator.cs" />
+    <Compile Include="LinkFactoryForAssembly.cs" />
+    <Compile Include="LinkFactoryForType.cs" />
+    <Compile Include="LinkFactoryForMethod.cs" />
+    <Compile Include="LinkFactoryForProperty.cs" />
     <Compile Include="Installer.cs" />
-    <Compile Include="ISymbolComparisonFactory.cs" />
-    <Compile Include="SolutionComparison.cs" />
-    <Compile Include="SymbolComparisonOfT.cs" />
-    <Compile Include="ISymbolComparison.cs" />
+    <Compile Include="ISymbolLinkFactory.cs" />
+    <Compile Include="SolutionLinker.cs" />
+    <Compile Include="SymbolLinkOfT.cs" />
+    <Compile Include="ISymbolLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

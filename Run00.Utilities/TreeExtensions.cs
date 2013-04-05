@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Run00.Utilities
 {
@@ -22,7 +17,7 @@ namespace Run00.Utilities
 				return result;
 
 			foreach (var child in value.Children)
-			{ 
+			{
 				result.Add(child);
 				child.RollUp(result);
 			}

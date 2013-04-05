@@ -1,4 +1,5 @@
 ﻿using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
@@ -10,10 +11,12 @@ namespace Run00.Versioning.Link
 		{
 			container.Register(
 				Classes.FromAssembly(this.GetType().Assembly)
-				.BasedOn(typeof(ISymbolLinkFactory<>))
+				.BasedOn(typeof(ISymbolChangeRule))
 				.WithService.FromInterface());
 
-			container.Register(Component.For<SolutionLinker>());
+			container.Register(Component.For<SolutionChangeCalculator>());
+
+			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 		}
 	}
 }

@@ -32,6 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="Roslyn.Compilers">
       <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
     </Reference>
@@ -62,11 +70,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IChangeCalculator.cs" />
-    <Compile Include="PropertySymbolExtensions.cs" />
-    <Compile Include="MethodSymbolExtensions.cs" />
-    <Compile Include="SymbolExtensions.cs" />
-    <Compile Include="SolutionExtensions.cs" />
+    <Compile Include="Installer.cs" />
+    <Compile Include="Rules\AddingSymbolRule.cs" />
+    <Compile Include="ContractChange.cs" />
+    <Compile Include="ContractChangeType.cs" />
+    <Compile Include="Rules\AccessibilityRule.cs" />
+    <Compile Include="Rules\AbstractionRule.cs" />
+    <Compile Include="Rules\ChildCountRule.cs" />
+    <Compile Include="Rules\VirtualRule.cs" />
+    <Compile Include="Rules\StaticRule.cs" />
+    <Compile Include="Rules\SealingRule.cs" />
+    <Compile Include="Rules\SymbolKindRule.cs" />
+    <Compile Include="Rules\DeletingSymbolRule.cs" />
+    <Compile Include="SolutionChangeCalculator.cs" />
+    <Compile Include="SymbolChangeType.cs" />
+    <Compile Include="SymbolChange.cs" />
+    <Compile Include="ISymbolChangeRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +96,9 @@
       <Project>{6887b2b9-7b3b-45c7-a025-1f7a4b25e838}</Project>
       <Name>Run00.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Run00.Versioning.Compare\Run00.Versioning.Compare.csproj">
+    <ProjectReference Include="..\Run00.Versioning.Compare\Run00.Versioning.Link.csproj">
       <Project>{1fb800bb-f364-4bb4-9a9a-461e3e13d91a}</Project>
-      <Name>Run00.Versioning.Compare</Name>
+      <Name>Run00.Versioning.Link</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

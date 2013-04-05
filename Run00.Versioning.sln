@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Utilities", "Run00.Ut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Utilities.UnitTest", "Run00.Utilities.UnitTest\Run00.Utilities.UnitTest.csproj", "{D19D7D57-8B6B-4395-8B5F-AA147FEAE8DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Compare", "Run00.Versioning.Compare\Run00.Versioning.Compare.csproj", "{1FB800BB-F364-4BB4-9A9A-461E3E13D91A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Link", "Run00.Versioning.Compare\Run00.Versioning.Link.csproj", "{1FB800BB-F364-4BB4-9A9A-461E3E13D91A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3F8DC940-6A28-474D-A0E6-9474310EB0EF}"
 	ProjectSection(SolutionItems) = preProject
