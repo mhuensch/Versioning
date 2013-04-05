@@ -22,7 +22,16 @@ namespace Run00.Versioning
 			foreach (var link in assemblyLinks)
 			{
 				var childChanges = link.RollUp<ISymbolLink>().SelectMany(l => CalculateSymbolChanges(l));
-				changes.Add(new ContractChange(link, childChanges));
+				var maxChange = childChanges.Max(c => c.ChangeType);
+
+				var change = ContractChangeType.Cosmetic;
+				if (maxChange == SymbolChangeType.Deleting || maxChange == SymbolChangeType.Modifying)
+					change = ContractChangeType.Breaking;
+
+				if (maxChange == SymbolChangeType.Adding)
+					change = ContractChangeType.Enhancement;
+
+				changes.Add(new ContractChange(link, childChanges, change));
 			}
 
 			return changes;
