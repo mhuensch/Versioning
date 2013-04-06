@@ -20,12 +20,16 @@ namespace Run00.Utilities
 		/// <returns>Enumerable of objects created by the join.</returns>
 		public static IEnumerable<TReturn> FullOuterJoin<T, TReturn, TKey>(this IEnumerable<T> right, IEnumerable<T> left, Func<T, TKey> keySelector, Func<T, T, TReturn> projection)
 		{
-			Contract.Requires(right != null);
-			Contract.Requires(left != null);
 			Contract.Requires(keySelector != null);
 			Contract.Requires(projection != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TReturn>>() != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TReturn>>().Count() >= 0);
+
+			if (right == null)
+				right = Enumerable.Empty<T>();
+
+			if (left == null)
+				left = Enumerable.Empty<T>();
 
 			var comparer = new KeyComparer<T, TKey>(keySelector);
 
@@ -57,12 +61,16 @@ namespace Run00.Utilities
 		/// <returns>Enumerable of objects created by the join.</returns>
 		public static IEnumerable<TResult> FullOuterJoin<T, TResult>(this IEnumerable<T> right, IEnumerable<T> left, Func<T, T, bool> comparison, Func<T, T, TResult> projection)
 		{
-			Contract.Requires(right != null);
-			Contract.Requires(left != null);
 			Contract.Requires(comparison != null);
 			Contract.Requires(projection != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TResult>>() != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TResult>>().Count() >= 0);
+
+			if (right == null)
+				right = Enumerable.Empty<T>();
+
+			if (left == null)
+				left = Enumerable.Empty<T>();
 
 			var bCopy = left.ToList();
 

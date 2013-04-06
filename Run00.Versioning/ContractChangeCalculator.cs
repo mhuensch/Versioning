@@ -3,16 +3,34 @@ using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 using Run00.Utilities;
 using Run00.Versioning.Link;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace Run00.Versioning
 {
 	public class ContractChangeCalculator
 	{
+		/// <summary>
+		/// Gets the changes between the original solution and the compareTo solution.
+		/// </summary>
+		/// <param name="original">The original solution.</param>
+		/// <param name="compareTo">The solution to compare the original to.</param>
+		/// <returns></returns>
+		/// <exception cref="System.InvalidOperationException">Original.Projects and Compare.Projects to can not be null.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Checked by code contracts.")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Checked by code contracts.")]
 		public IEnumerable<CommonCompilationChange> GetChanges(ISolution original, ISolution compareTo)
 		{
-			var changes = new List<CommonCompilationChange>();
+			Contract.Requires(original != null);
+			Contract.Requires(compareTo != null);
+			Contract.Ensures(Contract.Result<IEnumerable<CommonCompilationChange>>() != null);
+			Contract.Ensures(Enumerable.Count(Contract.Result<IEnumerable<CommonCompilationChange>>()) >= 0);
+
+			if (original.Projects == null || compareTo.Projects == null)
+				throw new InvalidOperationException("Original.Projects and Compare.Projects to can not be null.");
 
 			var oAssemblies = original.Projects.Select(p => p.GetCompilation());
 			var cAssemblies = compareTo.Projects.Select(p => p.GetCompilation());
@@ -21,6 +39,11 @@ namespace Run00.Versioning
 
 		private CommonCompilationChange GetCompilationChange(CommonCompilation original, CommonCompilation compareTo)
 		{
+			Contract.Ensures(Contract.Result<CommonCompilationChange>() != null);
+
+			if (original == null && compareTo == null)
+				throw new InvalidOperationException("Original and Compare to can not both be null.");
+
 			if (original == null)
 				return new CommonCompilationChange(original, compareTo, ContractChangeType.Enhancement);
 
@@ -34,6 +57,8 @@ namespace Run00.Versioning
 
 		private CommonSyntaxTreeChange GetTreeChange(CommonSyntaxTree original, CommonSyntaxTree compareTo)
 		{
+			Contract.Ensures(Contract.Result<CommonSyntaxTreeChange>() != null);
+
 			if (original == null)
 				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Enhancement);
 
@@ -41,7 +66,7 @@ namespace Run00.Versioning
 				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Breaking);
 
 			var textChanges = original.GetChanges(compareTo);
-			if (textChanges.Count == 0)
+			if (textChanges != null && textChanges.Count == 0)
 				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.None);
 
 			if (original.IsEquivalentTo(compareTo))
@@ -53,6 +78,8 @@ namespace Run00.Versioning
 
 		private CommonSyntaxNodeChange GetNodeChange(CommonSyntaxNode original, CommonSyntaxNode compareTo)
 		{
+			Contract.Ensures(Contract.Result<CommonSyntaxNodeChange>() != null);
+
 			if (original == null)
 				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
 
@@ -69,28 +96,5 @@ namespace Run00.Versioning
 			var maxChange = nodeChanges.Max(n => n.ChangeType);
 			return new CommonSyntaxNodeChange(original, compareTo, nodeChanges, maxChange);
 		}
-
-		//private IEnumerable<CommonSyntaxNodeChange> RollUpChanges(IEnumerable<CommonSyntaxTreeChange> trees)
-		//{
-		//	var result = new List<CommonSyntaxNodeChange>();
-		//	foreach (var tree in trees)
-		//	{
-		//		if (tree.NodeChange == null)
-		//			continue;
-		//		BoilUpChange(tree.NodeChange, result);
-		//	}
-		//	return result;
-		//}
-		//private void BoilUpChange(CommonSyntaxNodeChange change, List<CommonSyntaxNodeChange> changes)
-		//{
-		//	if (change.Children.Count() == 0)
-		//	{
-		//		changes.Add(change);
-		//		return;
-		//	}
-
-		//	foreach (var child in change.Children)
-		//		BoilUpChange(child, changes);
-		//}
 	}
 }
