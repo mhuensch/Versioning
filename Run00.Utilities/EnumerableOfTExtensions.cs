@@ -25,6 +25,7 @@ namespace Run00.Utilities
 			Contract.Requires(keySelector != null);
 			Contract.Requires(projection != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TReturn>>() != null);
+			Contract.Ensures(Contract.Result<IEnumerable<TReturn>>().Count() >= 0);
 
 			var comparer = new KeyComparer<T, TKey>(keySelector);
 
@@ -61,6 +62,7 @@ namespace Run00.Utilities
 			Contract.Requires(comparison != null);
 			Contract.Requires(projection != null);
 			Contract.Ensures(Contract.Result<IEnumerable<TResult>>() != null);
+			Contract.Ensures(Contract.Result<IEnumerable<TResult>>().Count() >= 0);
 
 			var bCopy = left.ToList();
 
