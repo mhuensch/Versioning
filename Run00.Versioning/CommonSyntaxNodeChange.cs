@@ -8,7 +8,7 @@ using System.Linq;
 namespace Run00.Versioning.Link
 {
 	[DebuggerDisplay("{DisplayString}")]
-	public class CommonSyntaxNodeChange : ITree<CommonSyntaxNodeChange>
+	public class CommonSyntaxNodeChange
 	{
 		[DebuggerDisplay("Node")]
 		public CommonSyntaxNode Original { get; private set; }
