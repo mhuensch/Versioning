@@ -9,7 +9,7 @@ namespace Run00.Versioning.Link
 	{
 		void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			container.Register(Component.For<SolutionChangeCalculator>());
+			container.Register(Component.For<ContractChangeCalculator>());
 			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 		}
 	}

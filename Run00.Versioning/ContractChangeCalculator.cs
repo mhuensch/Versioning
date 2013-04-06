@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Run00.Versioning
 {
-	public class SolutionChangeCalculator
+	public class ContractChangeCalculator
 	{
 		public IEnumerable<CommonCompilationChange> GetChanges(ISolution original, ISolution compareTo)
 		{

@@ -86,12 +86,34 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Content Include="Artifacts\Adding\Test.Sample.sln" />
+    <Content Include="Artifacts\Adding\Test.Sample\Test.Sample.csproj" />
+    <Content Include="Artifacts\Namespace\Test.Sample.sln" />
+    <Content Include="Artifacts\Namespace\Test.Sample\Test.Sample.csproj" />
+    <Content Include="Artifacts\Modifying\Test.Sample.sln" />
+    <Content Include="Artifacts\Modifying\Test.Sample\Test.Sample.csproj" />
     <Content Include="Artifacts\Refactor\Test.Sample.sln" />
     <Content Include="Artifacts\Refactor\Test.Sample\IOrderService.cs" />
     <Content Include="Artifacts\Refactor\Test.Sample\LineItem.cs" />
     <Content Include="Artifacts\Refactor\Test.Sample\Order.cs" />
     <Content Include="Artifacts\Refactor\Test.Sample\OrderService.cs" />
     <Content Include="Artifacts\Refactor\Test.Sample\Properties\AssemblyInfo.cs" />
+    <Content Include="Artifacts\Adding\Test.Sample\IOrderService.cs" />
+    <Content Include="Artifacts\Adding\Test.Sample\LineItem.cs" />
+    <Content Include="Artifacts\Adding\Test.Sample\Order.cs" />
+    <Content Include="Artifacts\Adding\Test.Sample\OrderService.cs" />
+    <Content Include="Artifacts\Adding\Test.Sample\Properties\AssemblyInfo.cs" />
+    <Compile Include="Artifacts\Adding\Test.Sample\Added.cs" />
+    <Content Include="Artifacts\Modifying\Test.Sample\IOrderService.cs" />
+    <Content Include="Artifacts\Modifying\Test.Sample\LineItem.cs" />
+    <Content Include="Artifacts\Modifying\Test.Sample\Order.cs" />
+    <Content Include="Artifacts\Modifying\Test.Sample\OrderService.cs" />
+    <Content Include="Artifacts\Modifying\Test.Sample\Properties\AssemblyInfo.cs" />
+    <Content Include="Artifacts\Namespace\Test.Sample\IOrderService.cs" />
+    <Content Include="Artifacts\Namespace\Test.Sample\LineItem.cs" />
+    <Content Include="Artifacts\Namespace\Test.Sample\Order.cs" />
+    <Content Include="Artifacts\Namespace\Test.Sample\OrderService.cs" />
+    <Content Include="Artifacts\Namespace\Test.Sample\Properties\AssemblyInfo.cs" />
     <Compile Include="RoslynReferenceHack.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\IOrderService.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\LineItem.cs" />
