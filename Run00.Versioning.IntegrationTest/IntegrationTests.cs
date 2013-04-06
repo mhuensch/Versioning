@@ -77,5 +77,16 @@ namespace Run00.Versioning.IntegrationTest
 			var result = calc.GetChanges(controlGroup, testGroup);
 			Assert.AreEqual(ContractChangeType.Breaking, result.Single().ChangeType);
 		}
+
+		[TestMethod, CategorizeByConvention]
+		public void WhenGenericIsChanged_ShouldBeBreaking()
+		{
+			//Arrange
+			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Generic\Test.Sample.sln"));
+			var calc = new ContractChangeCalculator();
+			var result = calc.GetChanges(controlGroup, testGroup);
+			Assert.AreEqual(ContractChangeType.Breaking, result.Single().ChangeType);
+		}
 	}
 }
