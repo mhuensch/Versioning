@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Run00.Versioning
 {
-	[DebuggerDisplay("{DisplayString}")]
+	[DebuggerDisplay("{DisplayString()}")]
 	public class CommonSyntaxTreeChange
 	{
 		/// <summary>

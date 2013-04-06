@@ -22,19 +22,56 @@ namespace Run00.Versioning
 		/// <exception cref="System.InvalidOperationException">Original.Projects and Compare.Projects to can not be null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Checked by code contracts.")]
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Checked by code contracts.")]
-		public IEnumerable<CommonCompilationChange> GetChanges(ISolution original, ISolution compareTo)
+		public IEnumerable<SuggestedVersion> SuggestVersions(ISolution original, ISolution compareTo)
 		{
 			Contract.Requires(original != null);
 			Contract.Requires(compareTo != null);
-			Contract.Ensures(Contract.Result<IEnumerable<CommonCompilationChange>>() != null);
-			Contract.Ensures(Enumerable.Count(Contract.Result<IEnumerable<CommonCompilationChange>>()) >= 0);
+			Contract.Ensures(Contract.Result<IEnumerable<SuggestedVersion>>() != null);
+			Contract.Ensures(Enumerable.Count(Contract.Result<IEnumerable<SuggestedVersion>>()) >= 0);
 
 			if (original.Projects == null || compareTo.Projects == null)
 				throw new InvalidOperationException("Original.Projects and Compare.Projects to can not be null.");
 
 			var oAssemblies = original.Projects.Select(p => p.GetCompilation());
 			var cAssemblies = compareTo.Projects.Select(p => p.GetCompilation());
-			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetCompilationChange(o, c));
+			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetSuggestedVersion(o, c));
+		}
+
+		private SuggestedVersion GetSuggestedVersion(CommonCompilation original, CommonCompilation compareTo)
+		{
+			var justification = GetCompilationChange(original, compareTo);
+			var originalVersion = GetAssemblyVersion(original);
+
+			var suggested = new Version("0.0.0.0");
+			switch (justification.ChangeType)
+			{
+				case ContractChangeType.None:
+					suggested = new Version(originalVersion.Major, originalVersion.Minor, originalVersion.Build, originalVersion.Revision);
+					break;
+				case ContractChangeType.Cosmetic:
+					suggested = new Version(originalVersion.Major, originalVersion.Minor, originalVersion.Build, originalVersion.Revision + 1);
+					break;
+				case ContractChangeType.Refactor:
+					suggested = new Version(originalVersion.Major, originalVersion.Minor, originalVersion.Build + 1, 0);
+					break;
+				case ContractChangeType.Enhancement:
+					suggested = new Version(originalVersion.Major, originalVersion.Minor + 1, 0, 0);
+					break;
+				case ContractChangeType.Breaking:
+					suggested = new Version(originalVersion.Major + 1, 0, 0, 0);
+					break;
+				default:
+					throw new InvalidOperationException("Contract change type for justification is not valid.");
+			}
+
+			return new SuggestedVersion(originalVersion, suggested, justification);
+		}
+
+		private Version GetAssemblyVersion(CommonCompilation compilation)
+		{
+			var attribute = compilation.Assembly.GetAttributes().AsEnumerable().FirstOrDefault(a => a.AttributeClass.Name.Equals("AssemblyVersionAttribute"));
+			var value = attribute.ConstructorArguments.ElementAt(0).Value.ToString();
+			return new Version(value);
 		}
 
 		private CommonCompilationChange GetCompilationChange(CommonCompilation original, CommonCompilation compareTo)

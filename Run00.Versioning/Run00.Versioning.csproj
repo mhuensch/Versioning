@@ -138,6 +138,7 @@
     <Compile Include="CommonSyntaxNodeChange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommonSyntaxTreeChange.cs" />
+    <Compile Include="SuggestedVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Run00.Versioning
 {
-	[DebuggerDisplay("{DisplayString}")]
+	[DebuggerDisplay("{DisplayString()}")]
 	public class CommonCompilationChange
 	{
 		/// <summary>
