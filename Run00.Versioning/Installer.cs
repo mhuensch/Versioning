@@ -9,13 +9,7 @@ namespace Run00.Versioning.Link
 	{
 		void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			container.Register(
-				Classes.FromAssembly(this.GetType().Assembly)
-				.BasedOn(typeof(ISymbolChangeRule))
-				.WithService.FromInterface());
-
 			container.Register(Component.For<SolutionChangeCalculator>());
-
 			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 		}
 	}

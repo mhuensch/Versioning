@@ -35,7 +35,7 @@ namespace Run00.Utilities
 				let unused = bCopy.Remove(bMatch)
 				select projection(aItem, bMatch);
 
-			return x.Union(bCopy.Select(bb => projection(default(T), bb)));
+			return x.ToList().Union(bCopy.Select(bb => projection(default(T), bb)));
 		}
 	}
 }

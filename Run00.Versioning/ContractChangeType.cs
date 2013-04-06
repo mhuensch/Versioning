@@ -2,6 +2,7 @@
 {
 	public enum ContractChangeType
 	{
+		None,
 		Cosmetic,
 		Refactor,
 		Enhancement,

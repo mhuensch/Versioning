@@ -124,14 +124,6 @@
       <Project>{6887b2b9-7b3b-45c7-a025-1f7a4b25e838}</Project>
       <Name>Run00.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Run00.Versioning.Compare\Run00.Versioning.Link.csproj">
-      <Project>{1fb800bb-f364-4bb4-9a9a-461e3e13d91a}</Project>
-      <Name>Run00.Versioning.Link</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Run00.Versioning.Extensions\Run00.Versioning.Extensions.csproj">
-      <Project>{4cbdbed7-e14e-42bb-b6f7-59ddfca8c240}</Project>
-      <Name>Run00.Versioning.Extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning\Run00.Versioning.csproj">
       <Project>{a75ff0ca-3aa8-4fc4-843a-6d63d2da0fd2}</Project>
       <Name>Run00.Versioning</Name>

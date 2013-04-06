@@ -1,4 +1,5 @@
-﻿using Roslyn.Compilers.CSharp;
+﻿using Roslyn.Compilers.Common;
+using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 using Run00.Utilities;
 using Run00.Versioning.Link;
@@ -9,96 +10,87 @@ namespace Run00.Versioning
 {
 	public class SolutionChangeCalculator
 	{
-		public SolutionChangeCalculator(SolutionLinker linker, IEnumerable<ISymbolChangeRule> rules)
+		public IEnumerable<CommonCompilationChange> GetChanges(ISolution original, ISolution compareTo)
 		{
-			_rules = rules;
-			_linker = linker;
+			var changes = new List<CommonCompilationChange>();
+
+			var oAssemblies = original.Projects.Select(p => p.GetCompilation());
+			var cAssemblies = compareTo.Projects.Select(p => p.GetCompilation());
+			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetCompilationChange(o, c));
 		}
 
-		public IEnumerable<ContractChange> GetChanges(ISolution original, ISolution compareTo)
+		private CommonCompilationChange GetCompilationChange(CommonCompilation original, CommonCompilation compareTo)
 		{
-			var changes = new List<ContractChange>();
+			if (original == null)
+				return new CommonCompilationChange(original, compareTo, ContractChangeType.Enhancement);
 
-			var assemblyLinks = _linker.Link(original, compareTo);
-			foreach (var link in assemblyLinks)
-			{
-				var childChanges = link.RollUp<ISymbolLink>().SelectMany(l => CalculateSymbolChanges(l));
+			if (compareTo == null)
+				return new CommonCompilationChange(original, compareTo, ContractChangeType.Breaking);
 
-				var change = ContractChangeType.Cosmetic;
-
-				if (childChanges.Count() > 0)
-				{
-					var maxChange = childChanges.Max(c => c.ChangeType);
-					if (maxChange == SymbolChangeType.Deleting || maxChange == SymbolChangeType.Modifying)
-						change = ContractChangeType.Breaking;
-
-					if (maxChange == SymbolChangeType.Adding)
-						change = ContractChangeType.Enhancement;
-				}
-
-				var refactor = false;
-				if (change == ContractChangeType.Cosmetic)
-					refactor = GetFirstRefactor(original, compareTo, link.Original.BaseName);
-
-				if (refactor)
-					change = ContractChangeType.Refactor;
-
-				changes.Add(new ContractChange(link, childChanges, change));
-			}
-
-			return changes;
+			var treeChanges = original.SyntaxTrees.FullOuterJoin(compareTo.SyntaxTrees, (a, b) => a.IsEquivalentTo(b, true), (o, c) => GetTreeChange(o, c));
+			var maxChange = treeChanges.Max(t => t.ChangeType);
+			return new CommonCompilationChange(original, compareTo, treeChanges, maxChange);
 		}
 
-		private bool GetFirstRefactor(ISolution original, ISolution compareTo, string assemblyName)
+		private CommonSyntaxTreeChange GetTreeChange(CommonSyntaxTree original, CommonSyntaxTree compareTo)
 		{
-			var pOriginal = original.Projects.Where(p => p.AssemblyName == assemblyName).Single();
-			var pCompareTo = compareTo.Projects.Where(p => p.AssemblyName == assemblyName).Single();
+			if (original == null)
+				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Enhancement);
 
-			if (pOriginal.Documents.Count() != pOriginal.Documents.Count())
-				return true;
+			if (compareTo == null)
+				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Breaking);
 
-			for (var index = 0; index < pOriginal.Documents.Count(); index++)
-			{
-				var dOriginal = pOriginal.Documents.ElementAt(index);
-				var dCompareTo = pCompareTo.Documents.ElementAt(index);
+			var textChanges = original.GetChanges(compareTo);
+			if (textChanges.Count == 0)
+				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.None);
 
-				if (dOriginal.Name != dCompareTo.Name)
-					return true;
+			if (original.IsEquivalentTo(compareTo))
+				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Cosmetic);
 
-				var tOriginal = SyntaxTree.ParseText(dOriginal.GetText());
-				var tCompareTo = SyntaxTree.ParseText(dCompareTo.GetText());
-
-
-				var spans = tCompareTo.GetChanges(tOriginal);
-				var spans2 = tCompareTo.GetChangedSpans(tOriginal);
-				
-			}
-
-			//var result = tree.GetLineSpan(spans.First(), false);
-			//var something = tree.GetChanges(tree2);
-			//var test = devDocuments[1].GetCodeRefactorings(spans.First());
-			return false;
+			var nodeChange = GetNodeChange(original.GetRoot(), compareTo.GetRoot());
+			return new CommonSyntaxTreeChange(original, compareTo, nodeChange, nodeChange.ChangeType);
 		}
 
-
-		public IEnumerable<SymbolChange> CalculateSymbolChanges(ISymbolLink link)
+		private CommonSyntaxNodeChange GetNodeChange(CommonSyntaxNode original, CommonSyntaxNode compareTo)
 		{
-			var result = new List<SymbolChange>();
-			foreach (var rule in _rules)
-			{
-				if (rule.IsValidFor(link) == false)
-					continue;
+			if (original == null)
+				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
 
-				var change = rule.GetChange(link);
-				if (change == null)
-					continue;
+			if (compareTo == null)
+				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Breaking);
 
-				result.Add(change);
-			}
-			return result;
+			if (original.IsEquivalentTo(compareTo))
+				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Cosmetic);
+
+			if ((SyntaxKind)original.Kind == SyntaxKind.Block)
+				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+
+			var nodeChanges = original.ChildNodes().FullOuterJoin(compareTo.ChildNodes(), (a, b) => a.IsEquivalentTo(b, true), (o, c) => GetNodeChange(o, c));
+			var maxChange = nodeChanges.Max(n => n.ChangeType);
+			return new CommonSyntaxNodeChange(original, compareTo, nodeChanges, maxChange);
 		}
 
-		private readonly IEnumerable<ISymbolChangeRule> _rules;
-		private readonly SolutionLinker _linker;
+		//private IEnumerable<CommonSyntaxNodeChange> RollUpChanges(IEnumerable<CommonSyntaxTreeChange> trees)
+		//{
+		//	var result = new List<CommonSyntaxNodeChange>();
+		//	foreach (var tree in trees)
+		//	{
+		//		if (tree.NodeChange == null)
+		//			continue;
+		//		BoilUpChange(tree.NodeChange, result);
+		//	}
+		//	return result;
+		//}
+		//private void BoilUpChange(CommonSyntaxNodeChange change, List<CommonSyntaxNodeChange> changes)
+		//{
+		//	if (change.Children.Count() == 0)
+		//	{
+		//		changes.Add(change);
+		//		return;
+		//	}
+
+		//	foreach (var child in change.Children)
+		//		BoilUpChange(child, changes);
+		//}
 	}
 }

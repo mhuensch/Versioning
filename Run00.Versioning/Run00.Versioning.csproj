@@ -71,26 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Installer.cs" />
-    <Compile Include="Rules\AddingSymbolRule.cs" />
-    <Compile Include="ContractChange.cs" />
+    <Compile Include="CommonCompilationChange.cs" />
     <Compile Include="ContractChangeType.cs" />
-    <Compile Include="Rules\AccessibilityRule.cs" />
-    <Compile Include="Rules\AbstractionRule.cs" />
-    <Compile Include="Rules\ChildCountRule.cs" />
-    <Compile Include="Rules\PropertyTypeRule.cs" />
-    <Compile Include="Rules\MethodParameterTypeRule.cs" />
-    <Compile Include="Rules\MethodParameterCountRule.cs" />
-    <Compile Include="Rules\MethodReturnTypeRule.cs" />
-    <Compile Include="Rules\VirtualRule.cs" />
-    <Compile Include="Rules\StaticRule.cs" />
-    <Compile Include="Rules\SealingRule.cs" />
-    <Compile Include="Rules\SymbolKindRule.cs" />
-    <Compile Include="Rules\DeletingSymbolRule.cs" />
     <Compile Include="SolutionChangeCalculator.cs" />
-    <Compile Include="SymbolChangeType.cs" />
-    <Compile Include="SymbolChange.cs" />
-    <Compile Include="ISymbolChangeRule.cs" />
+    <Compile Include="CommonSyntaxNodeChange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CommonSyntaxTreeChange.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -99,10 +85,6 @@
     <ProjectReference Include="..\Run00.Utilities\Run00.Utilities.csproj">
       <Project>{6887b2b9-7b3b-45c7-a025-1f7a4b25e838}</Project>
       <Name>Run00.Utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Run00.Versioning.Compare\Run00.Versioning.Link.csproj">
-      <Project>{1fb800bb-f364-4bb4-9a9a-461e3e13d91a}</Project>
-      <Name>Run00.Versioning.Link</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
