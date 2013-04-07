@@ -1,4 +1,5 @@
-﻿using Roslyn.Compilers.Common;
+﻿using Roslyn.Compilers;
+using Roslyn.Compilers.Common;
 using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 using Run00.Utilities;
@@ -7,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Run00.Versioning
 {
@@ -35,6 +38,70 @@ namespace Run00.Versioning
 			var oAssemblies = original.Projects.Select(p => p.GetCompilation());
 			var cAssemblies = compareTo.Projects.Select(p => p.GetCompilation());
 			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetSuggestedVersion(o, c));
+		}
+
+		public void UpdateAssemblyInfo(ISolution solution, IEnumerable<SuggestedVersion> suggestedVersions)
+		{
+			string pattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+			var versions = suggestedVersions
+				.Where(v => v.Justification.ComparedTo != null)
+				.Select(v => new { Version = v.Suggested, Compilation = v.Justification.ComparedTo });
+
+			foreach (var version in versions)
+			{
+				var info = version.Compilation.SyntaxTrees.Where(t => Path.GetFileName(t.FilePath).Equals("AssemblyInfo.cs")).Single();
+				var contents = info.GetRoot().ToFullString();
+				var newContents = Regex.Replace(contents, pattern, "[assembly: AssemblyVersion(\"" + version.Version + "\")]");
+				File.WriteAllText(info.FilePath, newContents);
+			}
+		}
+
+		public bool UpdateVersion(string filePath, Version version)
+		{
+			var workspace = Workspace.LoadSolution(filePath);
+			var current = workspace.CurrentSolution;
+
+			foreach (var project in current.Projects)
+			{
+				foreach (var document in project.Documents)
+				{
+					var tree = document.GetSyntaxTree() as SyntaxTree;
+					var node = tree.GetRoot();
+					var names = FindAssemblyNode(node);
+					var newNode = Syntax.Attribute(Syntax.ParseName("AssemblyVersion"), Syntax.ParseAttributeArgumentList(version.ToString()));
+					if (names == null)
+						continue;
+					node.ReplaceNode(names, newNode);
+					current = current.UpdateDocument(document.Id, node);
+				}
+			}
+
+			var changed = workspace.ApplyChanges(workspace.CurrentSolution, current);
+			
+
+			//var d = solution.Projects.First().Documents.ToList().Where(c => c.Name == "AssemblyInfo.cs").Single();
+
+			//var t = d.GetSyntaxTree().GetText();
+
+			//solution.UpdateDocument(d.Id, t);
+			//workspace.ApplyChanges()
+
+			return changed;
+		}
+
+		private CommonSyntaxNode FindAssemblyNode(SyntaxNode node)
+		{
+			if (node.GetText().ToString() == "AssemblyVersion" && node.Parent.Kind == SyntaxKind.Attribute)
+				return node.Parent;
+
+			foreach (var child in node.ChildNodes())
+			{
+				var found = FindAssemblyNode(child);
+				if (found != null)
+					return found;
+			}
+
+			return null;
 		}
 
 		private SuggestedVersion GetSuggestedVersion(CommonCompilation original, CommonCompilation compareTo)
