@@ -84,6 +84,8 @@
     <Content Include="Artifacts\Adding\Test.Sample\Test.Sample.csproj" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample.sln" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample\Test.Sample.csproj" />
+    <Content Include="Artifacts\Private\Test.Sample.sln" />
+    <Content Include="Artifacts\Private\Test.Sample\Test.Sample.csproj" />
     <Content Include="Artifacts\Generic\Test.Sample.sln" />
     <Content Include="Artifacts\Generic\Test.Sample\Test.Sample.csproj" />
     <Content Include="Artifacts\Namespace\Test.Sample.sln" />
@@ -118,10 +120,14 @@
     <Content Include="Artifacts\Generic\Test.Sample\OrderService.cs" />
     <Content Include="Artifacts\Generic\Test.Sample\Properties\AssemblyInfo.cs" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample\IOrderService.cs" />
-    <Content Include="Artifacts\ChangeVersion\Test.Sample\LineItem.cs" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample\Order.cs" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample\OrderService.cs" />
     <Content Include="Artifacts\ChangeVersion\Test.Sample\Properties\AssemblyInfo.cs" />
+    <Content Include="Artifacts\Private\Test.Sample\IOrderService.cs" />
+    <Content Include="Artifacts\Private\Test.Sample\LineItem.cs" />
+    <Content Include="Artifacts\Private\Test.Sample\Order.cs" />
+    <Content Include="Artifacts\Private\Test.Sample\OrderService.cs" />
+    <Content Include="Artifacts\Private\Test.Sample\Properties\AssemblyInfo.cs" />
     <Compile Include="RoslynReferenceHack.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\IOrderService.cs" />
     <Content Include="Artifacts\Comments\Test.Sample\LineItem.cs" />

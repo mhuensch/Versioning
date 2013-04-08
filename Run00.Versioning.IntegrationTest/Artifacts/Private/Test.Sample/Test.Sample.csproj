@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="IOrderService.cs" />
     <Compile Include="Order.cs" />
+    <Compile Include="LineItem.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
