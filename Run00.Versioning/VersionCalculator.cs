@@ -49,6 +49,7 @@ namespace Run00.Versioning
 		{
 			Contract.Requires(solution != null);
 			Contract.Requires(suggestedVersions != null);
+			Contract.Ensures(0 <= Enumerable.Count(suggestedVersions));
 
 			var selectedVersions = suggestedVersions
 				.Where(v => v.Justification.ComparedTo != null)
@@ -82,6 +83,7 @@ namespace Run00.Versioning
 		private static SuggestedVersion GetSuggestedVersion(CommonCompilation original, CommonCompilation compareTo)
 		{
 			Contract.Requires(original != null || compareTo != null);
+			Contract.Ensures(Contract.Result<SuggestedVersion>() != null);
 
 			var justification = GetCompilationChange(original, compareTo);
 
@@ -192,9 +194,10 @@ namespace Run00.Versioning
 		{
 			Contract.Ensures(Contract.Result<CommonSyntaxNodeChange>() != null);
 
+
 			if (original == null)
 			{
-				if (compareTo.IsPrivate())
+				if (compareTo != null && compareTo.IsPrivate())
 					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
 				else
 					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
@@ -202,7 +205,7 @@ namespace Run00.Versioning
 
 			if (compareTo == null)
 			{
-				if (original.IsPrivate())
+				if (original != null && original.IsPrivate())
 					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
 				else
 					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Breaking);

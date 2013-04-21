@@ -1,5 +1,6 @@
 ﻿using Roslyn.Compilers.Common;
 using Roslyn.Compilers.CSharp;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace Run00.Versioning
@@ -8,11 +9,14 @@ namespace Run00.Versioning
 	{
 		public static bool CanBeMatchedWith(this CommonSyntaxNode original, CommonSyntaxNode compareTo)
 		{
+			if (original == null || compareTo == null)
+				return false;
+
 			if (original.IsEquivalentTo(compareTo, true))
 				return true;
 
-			var originalName = GetIdentifierNode((SyntaxNode)original, false);
-			var compareToName = GetIdentifierNode((SyntaxNode)compareTo, false);
+			var originalName = GetIdentifierNode((SyntaxNode)original);
+			var compareToName = GetIdentifierNode((SyntaxNode)compareTo);
 			if (originalName == null || compareToName == null)
 				return false;
 
@@ -21,6 +25,8 @@ namespace Run00.Versioning
 
 		public static bool IsPrivate(this CommonSyntaxNode node)
 		{
+			Contract.Requires(node != null);
+
 			switch (((SyntaxNode)node).Kind)
 			{
 				case SyntaxKind.ClassDeclaration:
@@ -46,28 +52,35 @@ namespace Run00.Versioning
 			return false;
 		}
 
-		private static string GetIdentifierNode(SyntaxNode node, bool examineChildren)
+		private static string GetIdentifierNode(SyntaxNode node)
 		{
+			if (node == null)
+				return null;
+
+			object value;
 			switch (node.Kind)
 			{
 				case SyntaxKind.ClassDeclaration:
-					return ((ClassDeclarationSyntax)(node)).Identifier.Value.ToString();
+					value = ((ClassDeclarationSyntax)(node)).Identifier.Value;
+					break;
 				case SyntaxKind.InterfaceDeclaration:
-					return ((InterfaceDeclarationSyntax)(node)).Identifier.Value.ToString();
+					value = ((InterfaceDeclarationSyntax)(node)).Identifier.Value;
+					break;
 				case SyntaxKind.StructDeclaration:
-					return ((StructDeclarationSyntax)(node)).Identifier.Value.ToString();
+					value = ((StructDeclarationSyntax)(node)).Identifier.Value;
+					break;
 				case SyntaxKind.EnumDeclaration:
-					return ((EnumDeclarationSyntax)(node)).Identifier.Value.ToString();
+					value = ((EnumDeclarationSyntax)(node)).Identifier.Value;
+					break;
+				default:
+					value = null;
+					break;
 			}
 
-			foreach (var child in node.ChildNodes())
-			{
-				var result = GetIdentifierNode(child, examineChildren);
-				if (result != null)
-					return result;
-			}
+			if (value == null)
+				return null;
 
-			return null;
+			return value.ToString();
 		}
 	}
 }
