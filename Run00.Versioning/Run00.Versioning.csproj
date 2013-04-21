@@ -131,7 +131,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ExtensionsForCommonSyntaxNode.cs" />
+    <Compile Include="ExtensionsForCommonSyntaxTree.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="CommonCompilationChange.cs" />
     <Compile Include="ContractChangeType.cs" />

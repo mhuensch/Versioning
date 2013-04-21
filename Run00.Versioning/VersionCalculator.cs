@@ -193,10 +193,20 @@ namespace Run00.Versioning
 			Contract.Ensures(Contract.Result<CommonSyntaxNodeChange>() != null);
 
 			if (original == null)
-				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
+			{
+				if (compareTo.IsPrivate())
+					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+				else
+					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
+			}
 
 			if (compareTo == null)
-				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Breaking);
+			{
+				if (original.IsPrivate())
+					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+				else
+					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Breaking);
+			}
 
 			if (original.IsEquivalentTo(compareTo))
 				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Cosmetic);
