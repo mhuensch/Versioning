@@ -22,8 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Integratio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".playlists", ".playlists", "{E41CF363-9E02-4445-ADF7-74F0BBE2AAA7}"
 	ProjectSection(SolutionItems) = preProject
-		Integration.playlist = Integration.playlist
-		UnitTest.playlist = UnitTest.playlist
+		playlists\Integration.playlist = playlists\Integration.playlist
+		playlists\UnitTest.playlist = playlists\UnitTest.playlist
 	EndProjectSection
 EndProject
 Global
