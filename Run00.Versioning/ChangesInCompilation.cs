@@ -1,6 +1,4 @@
-﻿using Roslyn.Compilers.Common;
-using Run00.Versioning.Link;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
@@ -9,7 +7,7 @@ using System.Linq;
 namespace Run00.Versioning
 {
 	[DebuggerDisplay("{DisplayString()}")]
-	public class CommonCompilationChange
+	public class ChangesInCompilation
 	{
 		/// <summary>
 		/// Gets the original compilation given to the constructor.
@@ -18,7 +16,7 @@ namespace Run00.Versioning
 		/// The compilation <see cref="Roslyn.Compilers.Common.CommonCompilation"/>
 		/// </value>
 		[DebuggerDisplay("Compilation")]
-		public CommonCompilation Original { get; private set; }
+		public ICompilation Original { get; private set; }
 
 		/// <summary>
 		/// Gets the compilation to compare to the original given to the constructor.
@@ -27,7 +25,7 @@ namespace Run00.Versioning
 		/// The compilation <see cref="Roslyn.Compilers.Common.CommonCompilation"/>
 		/// </value>
 		[DebuggerDisplay("Compilation")]
-		public CommonCompilation ComparedTo { get; private set; }
+		public ICompilation ComparedTo { get; private set; }
 
 		/// <summary>
 		/// Gets the syntax tree changes between the original compilation and the compare to compilation
@@ -36,7 +34,7 @@ namespace Run00.Versioning
 		/// The syntax tree changes.
 		/// </value>
 		[DebuggerDisplay("Changes")]
-		public IEnumerable<CommonSyntaxTreeChange> SyntaxTreeChanges { get; private set; }
+		public IEnumerable<ChangesInType> TypeChanges { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the change.
@@ -47,38 +45,38 @@ namespace Run00.Versioning
 		public ContractChangeType ChangeType { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CommonCompilationChange"/> class.
+		/// Initializes a new instance of the <see cref="ChangesInCompilation"/> class.
 		/// </summary>
 		/// <param name="original">The original.</param>
 		/// <param name="comparedTo">The compared to.</param>
 		/// <param name="changeType">Type of the change.</param>
-		public CommonCompilationChange(CommonCompilation original, CommonCompilation comparedTo, ContractChangeType changeType)
+		public ChangesInCompilation(ICompilation original, ICompilation comparedTo, ContractChangeType changeType)
 		{
 			Contract.Requires(original != null || comparedTo != null);
-			Contract.Ensures(SyntaxTreeChanges != null);
-			Contract.Ensures(Enumerable.Count(SyntaxTreeChanges) == 0);
+			Contract.Ensures(TypeChanges != null);
+			Contract.Ensures(Enumerable.Count(TypeChanges) == 0);
 
 			Original = original;
 			ComparedTo = comparedTo;
-			SyntaxTreeChanges = Enumerable.Empty<CommonSyntaxTreeChange>();
+			TypeChanges = Enumerable.Empty<ChangesInType>();
 			ChangeType = changeType;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CommonCompilationChange"/> class.
+		/// Initializes a new instance of the <see cref="ChangesInCompilation"/> class.
 		/// </summary>
 		/// <param name="original">The original.</param>
 		/// <param name="comparedTo">The compared to.</param>
-		/// <param name="treeChanges">The compilation changes produced when the original and compared were compared.</param>
+		/// <param name="typeChanges">The compilation changes produced when the original and compared were compared.</param>
 		/// <param name="changeType">Type of the change when the original and compared to were compared</param>
-		public CommonCompilationChange(CommonCompilation original, CommonCompilation comparedTo, IEnumerable<CommonSyntaxTreeChange> treeChanges, ContractChangeType changeType)
+		public ChangesInCompilation(ICompilation original, ICompilation comparedTo, IEnumerable<ChangesInType> typeChanges, ContractChangeType changeType)
 		{
 			Contract.Requires(original != null || comparedTo != null);
-			Contract.Requires(treeChanges != null);
+			Contract.Requires(typeChanges != null);
 
 			Original = original;
 			ComparedTo = comparedTo;
-			SyntaxTreeChanges = treeChanges;
+			TypeChanges = typeChanges;
 			ChangeType = changeType;
 		}
 
@@ -100,7 +98,7 @@ namespace Run00.Versioning
 		private void ObjectInvariant()
 		{
 			Contract.Invariant(Original != null || ComparedTo != null);
-			Contract.Invariant(SyntaxTreeChanges != null);
+			Contract.Invariant(TypeChanges != null);
 		}
 	}
 }

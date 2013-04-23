@@ -1,8 +1,4 @@
-﻿using Roslyn.Compilers.Common;
-using Roslyn.Compilers.CSharp;
-using Roslyn.Services;
-using Run00.Utilities;
-using Run00.Versioning.Link;
+﻿using Run00.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -80,7 +76,7 @@ namespace Run00.Versioning
 			}
 		}
 
-		private static SuggestedVersion GetSuggestedVersion(CommonCompilation original, CommonCompilation compareTo)
+		private static SuggestedVersion GetSuggestedVersion(ICompilation original, ICompilation compareTo)
 		{
 			Contract.Requires(original != null || compareTo != null);
 			Contract.Ensures(Contract.Result<SuggestedVersion>() != null);
@@ -116,7 +112,7 @@ namespace Run00.Versioning
 			return new SuggestedVersion(originalVersion, suggested, justification);
 		}
 
-		private static Version GetVersion(CommonCompilation compliation)
+		private static Version GetVersion(ICompilation compliation)
 		{
 			if (compliation == null)
 				return null;
@@ -129,13 +125,13 @@ namespace Run00.Versioning
 			if (attributes == null)
 				return null;
 
-			var attribute = default(CommonAttributeData);
+			var attribute = default(IAttribute);
 			foreach (var a in attributes)
 			{
-				if (a == null || a.AttributeClass == null || a.AttributeClass.Name == null)
+				if (a == null || a.AttributeClass == null)
 					continue;
 
-				if (a.AttributeClass.Name.Equals("AssemblyVersionAttribute") == false)
+				if (a.AttributeClass.Equals("AssemblyVersionAttribute") == false)
 					continue;
 
 				attribute = a;
@@ -151,75 +147,97 @@ namespace Run00.Versioning
 			return new Version(value.Value.ToString());
 		}
 
-		private static CommonCompilationChange GetCompilationChange(CommonCompilation original, CommonCompilation compareTo)
+		private static ChangesInCompilation GetCompilationChange(ICompilation original, ICompilation compareTo)
 		{
-			Contract.Ensures(Contract.Result<CommonCompilationChange>() != null);
+			Contract.Ensures(Contract.Result<ChangesInCompilation>() != null);
 
 			if (original == null && compareTo == null)
 				throw new InvalidOperationException("Original and Compare to can not both be null.");
 
 			if (original == null)
-				return new CommonCompilationChange(original, compareTo, ContractChangeType.Enhancement);
+				return new ChangesInCompilation(original, compareTo, ContractChangeType.Enhancement);
 
 			if (compareTo == null)
-				return new CommonCompilationChange(original, compareTo, ContractChangeType.Breaking);
+				return new ChangesInCompilation(original, compareTo, ContractChangeType.Breaking);
 
-			var treeChanges = original.SyntaxTrees.FullOuterJoin(compareTo.SyntaxTrees, (a, b) => a.CanBeMatchedWith(b), (o, c) => GetTreeChange(o, c));
-			var maxChange = treeChanges.Max(t => t.ChangeType);
-			return new CommonCompilationChange(original, compareTo, treeChanges, maxChange);
+
+			var typeChanges = original.Assembly.Namespace.GetContractTypes()
+				.FullOuterJoin(compareTo.Assembly.Namespace.GetContractTypes(), (a, b) => a.CanBeMatchedWith(b), (o, c) => GetTypeChange(o, c));
+			
+			var treeChanges = Enumerable.Empty<ChangesInSyntaxNode>();
+			var maxChange = typeChanges.Max(t => t.ChangeType);
+			return new ChangesInCompilation(original, compareTo, typeChanges, maxChange);
 		}
 
-		private static CommonSyntaxTreeChange GetTreeChange(CommonSyntaxTree original, CommonSyntaxTree compareTo)
+		//private static ChangesInSyntaxTree GetTreeChange(ISyntaxTree original, ISyntaxTree compareTo)
+		//{
+		//	Contract.Ensures(Contract.Result<ChangesInSyntaxTree>() != null);
+
+		//	if (original == null)
+		//		return new ChangesInSyntaxTree(original, compareTo, ContractChangeType.Enhancement);
+
+		//	if (compareTo == null)
+		//		return new ChangesInSyntaxTree(original, compareTo, ContractChangeType.Breaking);
+
+		//	if (original.HasChanges(compareTo) == false)
+		//		return new ChangesInSyntaxTree(original, compareTo, ContractChangeType.None);
+
+		//	if (original.IsEquivalentTo(compareTo))
+		//		return new ChangesInSyntaxTree(original, compareTo, ContractChangeType.Cosmetic);
+
+		//	var nodeChange = GetNodeChange(original.GetRoot(), compareTo.GetRoot());
+		//	return new ChangesInSyntaxTree(original, compareTo, nodeChange, nodeChange.ChangeType);
+		//}
+
+		private static ChangesInType GetTypeChange(IType original, IType compareTo)
 		{
-			Contract.Ensures(Contract.Result<CommonSyntaxTreeChange>() != null);
+			Contract.Ensures(Contract.Result<ChangesInType>() != null);
+
+			if (original == null && compareTo == null)
+				throw new InvalidOperationException("Original and Compare to can not both be null.");
 
 			if (original == null)
-				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Enhancement);
+				return new ChangesInType(original, compareTo, ContractChangeType.Enhancement);
 
 			if (compareTo == null)
-				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Breaking);
+				return new ChangesInType(original, compareTo, ContractChangeType.Breaking);
 
-			var textChanges = original.GetChanges(compareTo);
-			if (textChanges != null && textChanges.Count == 0)
-				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.None);
+			var nodeChanges = original.SyntaxNodes.FullOuterJoin(compareTo.SyntaxNodes, (a, b) => a.CanBeMatchedWith(b), (o, c) => GetNodeChange(o, c));
+			var maxChange = nodeChanges.Max(t => t.ChangeType);
 
-			if (original.IsEquivalentTo(compareTo))
-				return new CommonSyntaxTreeChange(original, compareTo, ContractChangeType.Cosmetic);
-
-			var nodeChange = GetNodeChange(original.GetRoot(), compareTo.GetRoot());
-			return new CommonSyntaxTreeChange(original, compareTo, nodeChange, nodeChange.ChangeType);
+			return new ChangesInType(original, compareTo, nodeChanges, maxChange);
 		}
 
-		private static CommonSyntaxNodeChange GetNodeChange(CommonSyntaxNode original, CommonSyntaxNode compareTo)
+		private static ChangesInSyntaxNode GetNodeChange(ISyntaxNode original, ISyntaxNode compareTo)
 		{
-			Contract.Ensures(Contract.Result<CommonSyntaxNodeChange>() != null);
+			Contract.Ensures(Contract.Result<ChangesInSyntaxNode>() != null);
 
 
 			if (original == null)
 			{
 				if (compareTo != null && compareTo.IsPrivate())
-					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
 				else
-					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Enhancement);
+					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Enhancement);
 			}
 
 			if (compareTo == null)
 			{
 				if (original != null && original.IsPrivate())
-					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
 				else
-					return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Breaking);
+					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Breaking);
 			}
 
 			if (original.IsEquivalentTo(compareTo))
-				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Cosmetic);
+				return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Cosmetic);
 
-			if ((SyntaxKind)original.Kind == SyntaxKind.Block)
-				return new CommonSyntaxNodeChange(original, compareTo, ContractChangeType.Refactor);
+			if (original.IsBlock())
+				return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
 
 			var nodeChanges = original.ChildNodes().FullOuterJoin(compareTo.ChildNodes(), (a, b) => a.CanBeMatchedWith(b), (o, c) => GetNodeChange(o, c));
 			var maxChange = nodeChanges.Max(n => n.ChangeType);
-			return new CommonSyntaxNodeChange(original, compareTo, nodeChanges, maxChange);
+			return new ChangesInSyntaxNode(original, compareTo, nodeChanges, maxChange);
 		}
 
 		private const string _assemblyFileName = @"AssemblyInfo.cs";

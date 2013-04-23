@@ -106,7 +106,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumerableOfTExtensions.cs" />
+    <Compile Include="ExtensionsForEnumerableOfT.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="KeyComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

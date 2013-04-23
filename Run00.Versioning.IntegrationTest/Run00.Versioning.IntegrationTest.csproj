@@ -160,6 +160,10 @@
       <Project>{6887b2b9-7b3b-45c7-a025-1f7a4b25e838}</Project>
       <Name>Run00.Utilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Run00.Versioning.Roslyn\Run00.Versioning.Roslyn.csproj">
+      <Project>{4acaeff7-5a65-4a6c-b239-87daa8d96a90}</Project>
+      <Name>Run00.Versioning.Roslyn</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning\Run00.Versioning.csproj">
       <Project>{a75ff0ca-3aa8-4fc4-843a-6d63d2da0fd2}</Project>
       <Name>Run00.Versioning</Name>

@@ -1,7 +1,4 @@
-﻿using Roslyn.Compilers.Common;
-using Roslyn.Compilers.CSharp;
-using System.Linq;
-
+﻿
 namespace Run00.Versioning
 {
 	public static class ExtensionsForCommonSyntaxTree
@@ -14,7 +11,7 @@ namespace Run00.Versioning
 		/// <returns>
 		///   <c>true</c> if this instance [can be matched with] the specified original; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool CanBeMatchedWith(this CommonSyntaxTree original, CommonSyntaxTree compareTo)
+		public static bool CanBeMatchedWith(this ISyntaxTree original, ISyntaxTree compareTo)
 		{
 			if (original == null || compareTo == null)
 				return false;
@@ -22,7 +19,12 @@ namespace Run00.Versioning
 			if (original.IsEquivalentTo(compareTo, true))
 				return true;
 
-			return original.GetRoot().CanBeMatchedWith(compareTo.GetRoot());
+			var originalName = original.GetIdentifierName();
+			var compareToName = compareTo.GetIdentifierName();
+			if (originalName == null || compareToName == null)
+				return false;
+
+			return originalName.Equals(compareToName);
 		}
 	}
 }

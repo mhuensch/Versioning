@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Roslyn.Services;
 using Run00.MsTest;
-using Run00.Versioning.Link;
+using Run00.Versioning.Roslyn;
 using System.IO;
 using System.Linq;
 
@@ -15,8 +14,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenOnlyCodeBlockIsChanged_ShouldBeRefactor()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Refactor\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Refactor\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("1.0.1.0", result.Single().Suggested.ToString());
@@ -27,8 +26,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenOnlyCommentsAreChanged_ShouldBeCosmetic()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Comments\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Comments\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("1.0.0.1", result.Single().Suggested.ToString());
@@ -39,8 +38,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenClassIsDeleted_ShouldBeBreaking()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Deleted\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Deleted\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("2.0.0.0", result.Single().Suggested.ToString());
@@ -51,8 +50,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenClassIsAdded_ShouldBeEnhancement()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Adding\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Adding\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("1.1.0.0", result.Single().Suggested.ToString());
@@ -63,8 +62,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenMethodIsModified_ShouldBeBreaking()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Modifying\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Modifying\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("2.0.0.0", result.Single().Suggested.ToString());
@@ -75,8 +74,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenNamespaceIsChanged_ShouldBeBreaking()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Namespace\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Namespace\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("2.0.0.0", result.Single().Suggested.ToString());
@@ -87,8 +86,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenGenericIsChanged_ShouldBeBreaking()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Generic\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Generic\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual("2.0.0.0", result.Single().Suggested.ToString());
@@ -99,8 +98,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenPrivateMethodIsAdded_ShouldBeRefactor()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Private\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"Private\Test.Sample.sln"));
 			var result = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			Assert.AreEqual(ContractChangeType.Refactor, result.Single().Justification.ChangeType);
@@ -111,8 +110,8 @@ namespace Run00.Versioning.IntegrationTest
 		public void WhenChangingVersion_ShouldReturnTrue()
 		{
 			//Arrange
-			var controlGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-			var testGroup = Solution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample.sln"));
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample.sln"));
 			var versions = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
 			VersionCalculator.UpdateAssemblyInfo(testGroup, versions);

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Run00.Utilities
 {
-	public static class EnumerableOfTExtensions
+	public static class ExtensionsForEnumerableOfT
 	{
 		/// <summary>
 		/// Creates a full outer join between the two enumerables using the key selector to return an enumerable of objects created by the projection.

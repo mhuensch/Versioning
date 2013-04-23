@@ -56,7 +56,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Artifacts\TestPoco.cs" />
-    <Compile Include="ForEnumerableOfTExtensions\FullOuterJoin.cs" />
+    <Compile Include="ForExtensionsForEnumerableOfT\FullOuterJoin.cs" />
+    <Compile Include="ForKeyComparer\Constructor.cs" />
+    <Compile Include="ForKeyComparer\GetHashCode.cs" />
+    <Compile Include="ForKeyComparer\Equals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

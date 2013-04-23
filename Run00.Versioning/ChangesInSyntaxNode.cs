@@ -1,15 +1,13 @@
-﻿using Roslyn.Compilers.Common;
-using Roslyn.Compilers.CSharp;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Run00.Versioning.Link
+namespace Run00.Versioning
 {
 	[DebuggerDisplay("{DisplayString()}")]
-	public class CommonSyntaxNodeChange
+	public class ChangesInSyntaxNode
 	{
 		/// <summary>
 		/// Gets the syntax node given to the constructor.
@@ -18,7 +16,7 @@ namespace Run00.Versioning.Link
 		/// The syntax node <see cref="Roslyn.Compilers.Common.CommonSyntaxNode"/>
 		/// </value>
 		[DebuggerDisplay("Node")]
-		public CommonSyntaxNode Original { get; private set; }
+		public ISyntaxNode Original { get; private set; }
 
 		/// <summary>
 		/// Gets the syntax node to compare to the original given to the constructor.
@@ -27,7 +25,7 @@ namespace Run00.Versioning.Link
 		/// The syntax node <see cref="Roslyn.Compilers.Common.CommonSyntaxNode"/>
 		/// </value>
 		[DebuggerDisplay("Node")]
-		public CommonSyntaxNode ComparedTo { get; private set; }
+		public ISyntaxNode ComparedTo { get; private set; }
 
 		/// <summary>
 		/// Gets the syntax node changes between the original syntax node and the compared syntax node
@@ -36,7 +34,7 @@ namespace Run00.Versioning.Link
 		/// The changes.
 		/// </value>
 		[DebuggerDisplay("Changes")]
-		public IEnumerable<CommonSyntaxNodeChange> NodeChanges { get; private set; }
+		public IEnumerable<ChangesInSyntaxNode> NodeChanges { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the change.
@@ -47,30 +45,30 @@ namespace Run00.Versioning.Link
 		public ContractChangeType ChangeType { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CommonSyntaxNodeChange"/> class.
+		/// Initializes a new instance of the <see cref="ChangesInSyntaxNode"/> class.
 		/// </summary>
 		/// <param name="original">The original node</param>
 		/// <param name="comparedTo">The node it was compared to.</param>
 		/// <param name="changeType">Type of the change when the original and compared to were compared</param>
-		public CommonSyntaxNodeChange(CommonSyntaxNode original, CommonSyntaxNode comparedTo, ContractChangeType changeType)
+		public ChangesInSyntaxNode(ISyntaxNode original, ISyntaxNode comparedTo, ContractChangeType changeType)
 		{
 			Contract.Ensures(NodeChanges != null);
 			Contract.Ensures(Enumerable.Count(NodeChanges) == 0);
 
 			Original = original;
 			ComparedTo = comparedTo;
-			NodeChanges = Enumerable.Empty<CommonSyntaxNodeChange>();
+			NodeChanges = Enumerable.Empty<ChangesInSyntaxNode>();
 			ChangeType = changeType;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CommonSyntaxNodeChange"/> class.
+		/// Initializes a new instance of the <see cref="ChangesInSyntaxNode"/> class.
 		/// </summary>
 		/// <param name="original">The original node</param>
 		/// <param name="comparedTo">The node it was compared to.</param>
 		/// <param name="nodeChanges">The node changes produced when the original and compared were compared.</param>
 		/// <param name="changeType">Type of the change when the original and compared to were compared</param>
-		public CommonSyntaxNodeChange(CommonSyntaxNode original, CommonSyntaxNode comparedTo, IEnumerable<CommonSyntaxNodeChange> nodeChanges, ContractChangeType changeType)
+		public ChangesInSyntaxNode(ISyntaxNode original, ISyntaxNode comparedTo, IEnumerable<ChangesInSyntaxNode> nodeChanges, ContractChangeType changeType)
 		{
 			Original = original;
 			ComparedTo = comparedTo;
@@ -84,10 +82,10 @@ namespace Run00.Versioning.Link
 			Contract.Ensures(Contract.Result<string>() != null);
 
 			if (Original != null)
-				return ((SyntaxKind)Original.Kind).ToString();
+				return Original.Kind.ToString();
 
 			if (ComparedTo != null)
-				((SyntaxKind)ComparedTo.Kind).ToString();
+				ComparedTo.Kind.ToString();
 
 			return this.GetType().ToString();
 		}

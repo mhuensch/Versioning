@@ -31,7 +31,7 @@ namespace Run00.Versioning
 		/// The justification.
 		/// </value>
 		[DebuggerDisplay("Changes")]
-		public CommonCompilationChange Justification { get; private set; }
+		public ChangesInCompilation Justification { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SuggestedVersion"/> class.
@@ -39,7 +39,7 @@ namespace Run00.Versioning
 		/// <param name="original">The original version.</param>
 		/// <param name="suggested">The suggested version.</param>
 		/// <param name="justification">The justification for the suggested version.</param>
-		public SuggestedVersion(Version original, Version suggested, CommonCompilationChange justification)
+		public SuggestedVersion(Version original, Version suggested, ChangesInCompilation justification)
 		{
 			Contract.Requires(original != null);
 			Contract.Requires(suggested != null);

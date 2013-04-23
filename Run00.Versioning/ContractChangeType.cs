@@ -1,4 +1,4 @@
-﻿namespace Run00.Versioning.Link
+﻿namespace Run00.Versioning
 {
 	public enum ContractChangeType
 	{
