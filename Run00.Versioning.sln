@@ -20,6 +20,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Roslyn", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.IntegrationTest", "Run00.Versioning.IntegrationTest\Run00.Versioning.IntegrationTest.csproj", "{AF6001CA-3957-4DE1-993C-179DB119C79C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".playlists", ".playlists", "{E41CF363-9E02-4445-ADF7-74F0BBE2AAA7}"
+	ProjectSection(SolutionItems) = preProject
+		Integration.playlist = Integration.playlist
+		UnitTest.playlist = UnitTest.playlist
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

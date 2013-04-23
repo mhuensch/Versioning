@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Include>
+    <FullyQualifiedName Name="Run00.Versioning.UnitTest.ForCommonCompilationChange.Constructor.WhenPassedChangeType_ShouldSetChangeTypeProperty" />
+    <FullyQualifiedName Name="Run00.Versioning.UnitTest.ForCommonCompilationChange.Constructor.WhenPassedComparedToValue_ShouldSetComparedProperty" />
+    <FullyQualifiedName Name="Run00.Versioning.UnitTest.ForCommonCompilationChange.Constructor.WhenPassedVaildParameters_ShouldCreateObject" />
+    <FullyQualifiedName Name="Run00.Versioning.UnitTest.ForCommonCompilationChange.Constructor.WhenPassedOriginalValue_ShouldSetOrignalProperty" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForExtensionsForEnumerableOfT.FullOuterJoin.WhenDiffrentValuesAreProvidedAndComparisonGiven_ShouldReturnFullyJoinedList" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForExtensionsForEnumerableOfT.FullOuterJoin.WhenDiffrentValuesAreProvidedWithKeySelector_ShouldReturnFullyJoinedList" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForKeyComparer.Constructor.WhenFunctionIsProvided_KeyComparerIsCreated" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForKeyComparer.Equals.WhenPropertiesComparedAreEqual_ShouldReturnTrue" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForKeyComparer.Equals.WhenPropertiesComparedAreNotEqual_ShouldReturnFalse" />
+    <FullyQualifiedName Name="Run00.Utilities.UnitTest.ForKeyComparer.GetHashCode.WhenDataGiven_ShouldReturnHashCodeOfProperty" />
+  </Include>
+</Playlist>
