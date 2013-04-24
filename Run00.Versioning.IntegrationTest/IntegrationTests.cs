@@ -114,7 +114,7 @@ namespace Run00.Versioning.IntegrationTest
 			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample.sln"));
 			var versions = VersionCalculator.SuggestVersions(controlGroup, testGroup);
 
-			VersionCalculator.UpdateAssemblyInfo(versions);
+			VersionSetter.UpdateAssemblyInfo(versions);
 
 			var contents = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample\Properties\AssemblyInfo.cs"));
 			Assert.AreNotEqual(-1, contents.IndexOf("[assembly: AssemblyVersion(\"2.0.0.0\")]"));

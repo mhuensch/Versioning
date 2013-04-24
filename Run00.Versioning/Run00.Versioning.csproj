@@ -110,14 +110,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangesInType.cs" />
     <Compile Include="ContractChanges.cs" />
-    <Compile Include="ExtensionsForINamespace.cs" />
-    <Compile Include="ExtensionsForIType.cs" />
-    <Compile Include="ExtensionsForCommonSyntaxNode.cs" />
-    <Compile Include="ExtensionsForCommonSyntaxTree.cs" />
+    <Compile Include="ExtensionsForIContractItem.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ChangesInCompilation.cs" />
     <Compile Include="ContractChangeType.cs" />
     <Compile Include="IArgument.cs" />
     <Compile Include="IAssembly.cs" />
@@ -131,10 +126,9 @@
     <Compile Include="ISyntaxTree.cs" />
     <Compile Include="IType.cs" />
     <Compile Include="VersionCalculator.cs" />
-    <Compile Include="ChangesInSyntaxNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ChangesInSyntaxTree.cs" />
     <Compile Include="SuggestedVersion.cs" />
+    <Compile Include="VersionSetter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Run00.Utilities\Run00.Utilities.csproj">

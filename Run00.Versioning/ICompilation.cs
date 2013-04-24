@@ -6,7 +6,6 @@ namespace Run00.Versioning
 	{
 		IAssembly Assembly { get; }
 		IEnumerable<ISyntaxTree> SyntaxTrees { get; }
-
 		INamespace GlobalNamespace { get; }
 	}
 }

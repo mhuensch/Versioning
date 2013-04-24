@@ -36,47 +36,6 @@ namespace Run00.Versioning
 			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetSuggestedVersion(o, c));
 		}
 
-		/// <summary>
-		/// Updates the assembly info for each of the projects in the suggested versions.
-		/// </summary>
-		/// <param name="solution">The solution to be updated.</param>
-		/// <param name="suggestedVersions">The suggested versions.</param>
-		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "AssemblyInfo", Justification = "This is a known/valid file name.")]
-		public static void UpdateAssemblyInfo(IEnumerable<SuggestedVersion> suggestedVersions)
-		{
-			Contract.Requires(suggestedVersions != null);
-			Contract.Ensures(0 <= Enumerable.Count(suggestedVersions));
-
-			//var selectedVersions = suggestedVersions
-			//	.Where(v => v.Justification.ComparedTo != null)
-			//	.Where(v => v.Justification is ICompilation)
-			//	.Select(v => new { Version = v.Suggested, Compilation = (ICompilation)v.Justification.ComparedTo });
-
-			foreach (var selectedVersion in suggestedVersions)
-			{
-				if (selectedVersion == null || selectedVersion.ComparedToComp == null || selectedVersion.ComparedToComp.SyntaxTrees == null)
-					continue;
-
-				var assemblyFiles = selectedVersion.ComparedToComp.SyntaxTrees.Where(t => Path.GetFileName(t.FilePath).Equals(_assemblyFileName));
-				if (assemblyFiles.Count() != 1)
-					throw new InvalidOperationException("More than one file found with the name: " + _assemblyFileName);
-
-				var syntaxTree = assemblyFiles.Single();
-				Contract.Assume(syntaxTree != null, "Single() can not return a null reference.");
-
-				var root = syntaxTree.GetRoot();
-				if (root == null)
-					throw new InvalidOperationException(_assemblyFileName + " must have a valid root.");
-
-				var contents = root.ToFullString();
-				Contract.Assume(contents != null, "ToFullString() can not return a null string");
-
-				var newContents = Regex.Replace(contents, _assemblyRegexPattern, "[assembly: AssemblyVersion(\"" + selectedVersion.Suggested + "\")]");
-				newContents = Regex.Replace(newContents, _assemblyFileRegexPattern, "[assembly: AssemblyFileVersion(\"" + selectedVersion.Suggested + "\")]");
-				File.WriteAllText(syntaxTree.FilePath, newContents);
-			}
-		}
-
 		private static SuggestedVersion GetSuggestedVersion(ICompilation original, ICompilation compareTo)
 		{
 			Contract.Requires(original != null || compareTo != null);
@@ -112,43 +71,6 @@ namespace Run00.Versioning
 
 			return new SuggestedVersion(originalVersion, suggested, original, compareTo, justification);
 		}
-
-		private static Version GetVersion(ICompilation compliation)
-		{
-			if (compliation == null)
-				return null;
-
-			var assembly = compliation.Assembly;
-			if (assembly == null)
-				return null;
-
-			var attributes = assembly.GetAttributes().AsEnumerable();
-			if (attributes == null)
-				return null;
-
-			var attribute = default(IAttribute);
-			foreach (var a in attributes)
-			{
-				if (a == null || a.AttributeClass == null)
-					continue;
-
-				if (a.AttributeClass.Equals("AssemblyVersionAttribute") == false)
-					continue;
-
-				attribute = a;
-			}
-
-			if (attribute == null || attribute.ConstructorArguments == null)
-				return null;
-
-			var value = attribute.ConstructorArguments.ElementAt(0);
-			if (value.Value == null)
-				return null;
-
-			return new Version(value.Value.ToString());
-		}
-
-
 
 		private static ContractChanges GetContractChanges(IContractItem original, IContractItem compareTo)
 		{
@@ -190,86 +112,40 @@ namespace Run00.Versioning
 			return new ContractChanges(original, compareTo, nodeChanges, maxChange);
 		}
 
-
-
-
-
-
-
-		private static ChangesInCompilation GetCompilationChange(ICompilation original, ICompilation compareTo)
+		private static Version GetVersion(ICompilation compliation)
 		{
-			Contract.Ensures(Contract.Result<ChangesInCompilation>() != null);
+			if (compliation == null)
+				return null;
 
-			if (original == null && compareTo == null)
-				throw new InvalidOperationException("Original and Compare to can not both be null.");
+			var assembly = compliation.Assembly;
+			if (assembly == null)
+				return null;
 
-			if (original == null)
-				return new ChangesInCompilation(original, compareTo, ContractChangeType.Enhancement);
+			var attributes = assembly.GetAttributes().AsEnumerable();
+			if (attributes == null)
+				return null;
 
-			if (compareTo == null)
-				return new ChangesInCompilation(original, compareTo, ContractChangeType.Breaking);
-
-
-			var typeChanges = original.GlobalNamespace.GetContractTypes()
-				.FullOuterJoin(compareTo.GlobalNamespace.GetContractTypes(), (a, b) => a.CanBeMatchedWith(b), (o, c) => GetTypeChange(o, c));
-
-			var maxChange = typeChanges.Max(t => t.ChangeType);
-			return new ChangesInCompilation(original, compareTo, typeChanges, maxChange);
-		}
-
-		private static ChangesInType GetTypeChange(IType original, IType compareTo)
-		{
-			Contract.Ensures(Contract.Result<ChangesInType>() != null);
-
-			if (original == null && compareTo == null)
-				throw new InvalidOperationException("Original and Compare to can not both be null.");
-
-			if (original == null)
-				return new ChangesInType(original, compareTo, ContractChangeType.Enhancement);
-
-			if (compareTo == null)
-				return new ChangesInType(original, compareTo, ContractChangeType.Breaking);
-
-			var nodeChanges = original.SyntaxNodes.FullOuterJoin(compareTo.SyntaxNodes, (a, b) => a.CanBeMatchedWith(b), (o, c) => GetNodeChange(o, c));
-			var maxChange = nodeChanges.Max(t => t.ChangeType);
-
-			return new ChangesInType(original, compareTo, nodeChanges, maxChange);
-		}
-
-		private static ChangesInSyntaxNode GetNodeChange(ISyntaxNode original, ISyntaxNode compareTo)
-		{
-			Contract.Ensures(Contract.Result<ChangesInSyntaxNode>() != null);
-
-
-			if (original == null)
+			var attribute = default(IAttribute);
+			foreach (var a in attributes)
 			{
-				if (compareTo != null && compareTo.IsPrivate())
-					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
-				else
-					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Enhancement);
+				if (a == null || a.AttributeClass == null)
+					continue;
+
+				if (a.AttributeClass.Equals("AssemblyVersionAttribute") == false)
+					continue;
+
+				attribute = a;
 			}
 
-			if (compareTo == null)
-			{
-				if (original != null && original.IsPrivate())
-					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
-				else
-					return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Breaking);
-			}
+			if (attribute == null || attribute.ConstructorArguments == null)
+				return null;
 
-			if (original.IsEquivalentTo(compareTo))
-				return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Cosmetic);
+			var value = attribute.ConstructorArguments.ElementAt(0);
+			if (value.Value == null)
+				return null;
 
-			if (original.IsBlock())
-				return new ChangesInSyntaxNode(original, compareTo, ContractChangeType.Refactor);
-
-			var nodeChanges = original.ChildNodes().FullOuterJoin(compareTo.ChildNodes(), (a, b) => a.CanBeMatchedWith(b), (o, c) => GetNodeChange(o, c));
-			var maxChange = nodeChanges.Max(n => n.ChangeType);
-			return new ChangesInSyntaxNode(original, compareTo, nodeChanges, maxChange);
+			return new Version(value.Value.ToString());
 		}
 
-		private const string _assemblyFileName = @"AssemblyInfo.cs";
-		private const string _assemblyRegexPattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
-		private const string _assemblyFileRegexPattern = @"\[assembly\: AssemblyFileVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
 	}
 }
