@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangesInType.cs" />
+    <Compile Include="ContractChanges.cs" />
     <Compile Include="ExtensionsForINamespace.cs" />
     <Compile Include="ExtensionsForIType.cs" />
     <Compile Include="ExtensionsForCommonSyntaxNode.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="IAssembly.cs" />
     <Compile Include="IAttribute.cs" />
     <Compile Include="ICompilation.cs" />
+    <Compile Include="IContractItem.cs" />
     <Compile Include="INamespace.cs" />
     <Compile Include="IProject.cs" />
     <Compile Include="ISolution.cs" />

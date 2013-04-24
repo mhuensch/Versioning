@@ -2,10 +2,11 @@
 
 namespace Run00.Versioning
 {
-	public interface ICompilation
+	public interface ICompilation : IContractItem
 	{
 		IAssembly Assembly { get; }
 		IEnumerable<ISyntaxTree> SyntaxTrees { get; }
-		//INamespace Namespace { get; }
+
+		INamespace GlobalNamespace { get; }
 	}
 }

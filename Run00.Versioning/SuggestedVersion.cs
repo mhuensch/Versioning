@@ -24,6 +24,12 @@ namespace Run00.Versioning
 		[DebuggerDisplay("Compilation")]
 		public Version Suggested { get; private set; }
 
+
+		public ICompilation OriginalComp { get; private set; }
+
+		public ICompilation ComparedToComp { get; private set; }
+
+
 		/// <summary>
 		/// Gets or sets the justification.
 		/// </summary>
@@ -31,7 +37,7 @@ namespace Run00.Versioning
 		/// The justification.
 		/// </value>
 		[DebuggerDisplay("Changes")]
-		public ChangesInCompilation Justification { get; private set; }
+		public ContractChanges Justification { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SuggestedVersion"/> class.
@@ -39,14 +45,18 @@ namespace Run00.Versioning
 		/// <param name="original">The original version.</param>
 		/// <param name="suggested">The suggested version.</param>
 		/// <param name="justification">The justification for the suggested version.</param>
-		public SuggestedVersion(Version original, Version suggested, ChangesInCompilation justification)
+		public SuggestedVersion(Version original, Version suggested, ICompilation originalComp, ICompilation comparedToComp, ContractChanges justification)
 		{
 			Contract.Requires(original != null);
 			Contract.Requires(suggested != null);
+			Contract.Requires(originalComp != null);
+			Contract.Requires(comparedToComp != null);
 			Contract.Requires(justification != null);
 
 			Original = original;
 			Suggested = suggested;
+			OriginalComp = originalComp;
+			ComparedToComp = comparedToComp;
 			Justification = justification;
 		}
 	}

@@ -3,12 +3,10 @@ using Roslyn.Compilers.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Run00.Versioning.Roslyn
 {
-	public class RoslynSyntaxNode : ISyntaxNode
+	public class RoslynSyntaxNode : ISyntaxNode, IContractItem
 	{
 		public RoslynSyntaxNode(CommonSyntaxNode node)
 		{
@@ -17,7 +15,7 @@ namespace Run00.Versioning.Roslyn
 
 		string ISyntaxNode.Kind
 		{
-			get 
+			get
 			{
 				return ((SyntaxNode)_node).Kind.ToString();
 			}
@@ -111,5 +109,70 @@ namespace Run00.Versioning.Roslyn
 		}
 
 		private readonly CommonSyntaxNode _node;
+
+
+
+
+
+
+		bool IContractItem.IsPrivate
+		{
+			get
+			{
+				switch (((SyntaxNode)_node).Kind)
+				{
+					case SyntaxKind.ClassDeclaration:
+						return ((ClassDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.InterfaceDeclaration:
+						return ((InterfaceDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.StructDeclaration:
+						return ((StructDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.EnumDeclaration:
+						return ((EnumDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.DelegateDeclaration:
+						return ((DelegateDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.DestructorDeclaration:
+						return ((DestructorDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.EventDeclaration:
+						return ((EventDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.MethodDeclaration:
+						return ((MethodDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+					case SyntaxKind.PropertyDeclaration:
+						return ((PropertyDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
+				}
+
+				return false;
+			}
+		}
+
+		bool IContractItem.IsCodeBlock
+		{
+			get { return (SyntaxKind)_node.Kind == SyntaxKind.Block; }
+		}
+
+		IEnumerable<IContractItem> IContractItem.Children
+		{
+			get { return _node.ChildNodes().Select(c => new RoslynSyntaxNode(c)); }
+		}
+
+		string IContractItem.Name
+		{
+			get
+			{
+				switch (((SyntaxNode)_node).Kind)
+				{
+					case SyntaxKind.ClassDeclaration:
+						return ((ClassDeclarationSyntax)(_node)).Identifier.Value.ToString();
+					case SyntaxKind.InterfaceDeclaration:
+						return ((InterfaceDeclarationSyntax)(_node)).Identifier.Value.ToString();
+					case SyntaxKind.StructDeclaration:
+						return ((StructDeclarationSyntax)(_node)).Identifier.Value.ToString();
+					case SyntaxKind.EnumDeclaration:
+						return ((EnumDeclarationSyntax)(_node)).Identifier.Value.ToString();
+					default:
+						return Guid.NewGuid().ToString();
+				}
+			}
+		}
 	}
 }

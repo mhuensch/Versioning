@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Linq;
-
+﻿
 namespace Run00.Versioning
 {
 	public static class ExtensionsForCommonSyntaxNode
@@ -21,7 +18,7 @@ namespace Run00.Versioning
 
 			if (original.IsEquivalentTo(compareTo, true))
 				return true;
-			
+
 			var originalName = original.GetIdentifierName();
 			var compareToName = compareTo.GetIdentifierName();
 			if (originalName == null || compareToName == null)
@@ -31,7 +28,21 @@ namespace Run00.Versioning
 		}
 
 
+		public static bool CanBeMatchedWith(this IContractItem original, IContractItem compareTo)
+		{
+			if (original == null || compareTo == null)
+				return false;
 
+			var o = original as ISyntaxNode;
+			var c = compareTo as ISyntaxNode;
+			if (o != null && c != null)
+			{
+				if (o.IsEquivalentTo(c, true))
+					return true;
+			}
+
+			return original.Name.Equals(compareTo.Name);
+		}
 
 
 	}
