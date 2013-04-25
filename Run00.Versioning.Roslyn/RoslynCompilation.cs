@@ -30,35 +30,24 @@ namespace Run00.Versioning.Roslyn
 			}
 		}
 
-		INamespace ICompilation.GlobalNamespace
-		{
-			get
-			{
-				return new RoslynNamespace(_compilation.Assembly.GlobalNamespace);
-			}
-		}
-
-		private readonly CommonCompilation _compilation;
-
-
-
-
 		bool IContractItem.IsPrivate { get { return false; } }
 
 		bool IContractItem.IsCodeBlock { get { return false; } }
 
-		IEnumerable<IContractItem> IContractItem.Children 
-		{ 
-			get 
+		IEnumerable<IContractItem> IContractItem.Children
+		{
+			get
 			{
 				return _compilation.Assembly.GlobalNamespace.GetTypeMembers().AsEnumerable().Select(n => (IContractItem)new RoslynType(n)).Union(
-							_compilation.Assembly.GlobalNamespace.GetNamespaceMembers().AsEnumerable().Select(m => (IContractItem)new RoslynNamespace(m))); 
-			} 
+							_compilation.Assembly.GlobalNamespace.GetNamespaceMembers().AsEnumerable().Select(m => (IContractItem)new RoslynNamespace(m)));
+			}
 		}
 
 		string IContractItem.Name
 		{
 			get { return _compilation.GlobalNamespace.Name; }
 		}
+
+		private readonly CommonCompilation _compilation;
 	}
 }

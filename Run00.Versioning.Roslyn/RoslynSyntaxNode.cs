@@ -13,14 +13,6 @@ namespace Run00.Versioning.Roslyn
 			_node = node;
 		}
 
-		string ISyntaxNode.Kind
-		{
-			get
-			{
-				return ((SyntaxNode)_node).Kind.ToString();
-			}
-		}
-
 		string ISyntaxNode.ToFullString()
 		{
 			return _node.ToFullString();
@@ -74,38 +66,6 @@ namespace Run00.Versioning.Roslyn
 				return null;
 
 			return value.ToString();
-		}
-
-		bool ISyntaxNode.IsPrivate()
-		{
-			switch (((SyntaxNode)_node).Kind)
-			{
-				case SyntaxKind.ClassDeclaration:
-					return ((ClassDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.InterfaceDeclaration:
-					return ((InterfaceDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.StructDeclaration:
-					return ((StructDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.EnumDeclaration:
-					return ((EnumDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.DelegateDeclaration:
-					return ((DelegateDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.DestructorDeclaration:
-					return ((DestructorDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.EventDeclaration:
-					return ((EventDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.MethodDeclaration:
-					return ((MethodDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-				case SyntaxKind.PropertyDeclaration:
-					return ((PropertyDeclarationSyntax)(_node)).Modifiers.Any(m => m.Kind == SyntaxKind.PrivateKeyword || m.Kind == SyntaxKind.InternalKeyword);
-			}
-
-			return false;
-		}
-
-		bool ISyntaxNode.IsBlock()
-		{
-			return (SyntaxKind)_node.Kind == SyntaxKind.Block;
 		}
 
 		private readonly CommonSyntaxNode _node;

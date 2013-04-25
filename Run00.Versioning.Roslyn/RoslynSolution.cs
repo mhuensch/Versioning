@@ -16,11 +16,11 @@ namespace Run00.Versioning.Roslyn
 			_solution = solution;
 		}
 
-		IEnumerable<IProject> ISolution.Projects
+		IEnumerable<ICompilation> ISolution.Compilations
 		{
 			get
 			{
-				return _solution.Projects.Select(p => new RoslynProject(p));
+				return _solution.Projects.Select(p => new RoslynCompilation(p.GetCompilation()));
 			}
 		}
 

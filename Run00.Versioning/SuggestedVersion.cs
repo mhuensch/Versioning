@@ -12,7 +12,6 @@ namespace Run00.Versioning
 		/// <value>
 		/// The original.
 		/// </value>
-		[DebuggerDisplay("Compilation")]
 		public Version Original { get; private set; }
 
 		/// <summary>
@@ -21,7 +20,6 @@ namespace Run00.Versioning
 		/// <value>
 		/// The suggested.
 		/// </value>
-		[DebuggerDisplay("Compilation")]
 		public Version Suggested { get; private set; }
 
 
@@ -36,7 +34,6 @@ namespace Run00.Versioning
 		/// <value>
 		/// The justification.
 		/// </value>
-		[DebuggerDisplay("Changes")]
 		public ContractChanges Justification { get; private set; }
 
 		/// <summary>

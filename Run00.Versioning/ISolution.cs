@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Run00.Versioning
 {
 	public interface ISolution
 	{
-		IEnumerable<IProject> Projects { get; }
+		IEnumerable<ICompilation> Compilations { get; }
 	}
 }

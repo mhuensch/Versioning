@@ -1,11 +1,7 @@
-﻿using Run00.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Run00.Versioning
 {
@@ -20,35 +16,16 @@ namespace Run00.Versioning
 		/// <exception cref="System.InvalidOperationException">Original.Projects and Compare.Projects to can not be null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Checked by code contracts.")]
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Checked by code contracts.")]
-		public static IEnumerable<SuggestedVersion> SuggestVersions(ISolution original, ISolution compareTo)
+		public static SuggestedVersion Calculate(CompilationChanges changes)
 		{
-			Contract.Requires(original != null);
-			Contract.Requires(compareTo != null);
-			Contract.Ensures(Contract.Result<IEnumerable<SuggestedVersion>>() != null);
-			Contract.Ensures(Enumerable.Count(Contract.Result<IEnumerable<SuggestedVersion>>()) >= 0);
-
-			if (original.Projects == null || compareTo.Projects == null)
-				throw new InvalidOperationException("Original.Projects and Compare.Projects to can not be null.");
-
-			var oAssemblies = original.Projects.Select(p => p.GetCompilation());
-			var cAssemblies = compareTo.Projects.Select(p => p.GetCompilation());
-
-			return oAssemblies.FullOuterJoin(cAssemblies, (t) => t.Assembly.Name, (o, c) => GetSuggestedVersion(o, c));
-		}
-
-		private static SuggestedVersion GetSuggestedVersion(ICompilation original, ICompilation compareTo)
-		{
-			Contract.Requires(original != null || compareTo != null);
 			Contract.Ensures(Contract.Result<SuggestedVersion>() != null);
 
-			var justification = GetContractChanges(original, compareTo);
-
-			var originalVersion = GetVersion(original != null ? original : compareTo);
+			var originalVersion = GetVersion(changes.Original != null ? changes.Original : changes.ComparedTo);
 			if (originalVersion == null)
 				originalVersion = new Version("0.0.0.0");
 
 			var suggested = new Version("0.0.0.0");
-			switch (justification.ChangeType)
+			switch (changes.Changes.ChangeType)
 			{
 				case ContractChangeType.None:
 					suggested = new Version(originalVersion.Major, originalVersion.Minor, originalVersion.Build, originalVersion.Revision);
@@ -69,47 +46,7 @@ namespace Run00.Versioning
 					throw new InvalidOperationException("Contract change type for justification is not valid.");
 			}
 
-			return new SuggestedVersion(originalVersion, suggested, original, compareTo, justification);
-		}
-
-		private static ContractChanges GetContractChanges(IContractItem original, IContractItem compareTo)
-		{
-			Contract.Ensures(Contract.Result<ContractChanges>() != null);
-
-			if (original == null && compareTo == null)
-				throw new InvalidOperationException("Original and Compare to can not both be null.");
-
-			if (original == null)
-			{
-				if (compareTo != null && compareTo.IsPrivate)
-					return new ContractChanges(original, compareTo, ContractChangeType.Refactor);
-				else
-					return new ContractChanges(original, compareTo, ContractChangeType.Enhancement);
-			}
-
-			if (compareTo == null)
-			{
-				if (original != null && original.IsPrivate)
-					return new ContractChanges(original, compareTo, ContractChangeType.Refactor);
-				else
-					return new ContractChanges(original, compareTo, ContractChangeType.Breaking);
-			}
-
-			if (original.IsCodeBlock)
-			{
-				if (((ISyntaxNode)original).IsEquivalentTo(((ISyntaxNode)compareTo)))
-					return new ContractChanges(original, compareTo, ContractChangeType.Cosmetic);
-				else
-					return new ContractChanges(original, compareTo, ContractChangeType.Refactor);
-			}
-
-
-			if (original.Children.Count() == 0 && compareTo.Children.Count() == 0)
-				return new ContractChanges(original, compareTo, ContractChangeType.None);
-
-			var nodeChanges = original.Children.FullOuterJoin(compareTo.Children, (a, b) => a.CanBeMatchedWith(b), (o, c) => GetContractChanges(o, c));
-			var maxChange = nodeChanges.Max(n => n.ChangeType);
-			return new ContractChanges(original, compareTo, nodeChanges, maxChange);
+			return new SuggestedVersion(originalVersion, suggested, changes.Original, changes.ComparedTo, changes.Changes);
 		}
 
 		private static Version GetVersion(ICompilation compliation)
@@ -146,6 +83,5 @@ namespace Run00.Versioning
 
 			return new Version(value.Value.ToString());
 		}
-
 	}
 }
