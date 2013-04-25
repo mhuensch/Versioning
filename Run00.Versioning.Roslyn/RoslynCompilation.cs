@@ -14,19 +14,16 @@ namespace Run00.Versioning.Roslyn
 			_compilation = compilation;
 		}
 
+		IEnumerable<IAttribute> ICompilation.GetAttributes()
+		{
+			return _compilation.Assembly.GetAttributes().AsEnumerable().Select(a => new RoslynAttribute(a));
+		}
+
 		IEnumerable<ISyntaxTree> ICompilation.SyntaxTrees
 		{
 			get
 			{
 				return _compilation.SyntaxTrees.Select(t => new RoslynSyntaxTree(t));
-			}
-		}
-
-		IAssembly ICompilation.Assembly
-		{
-			get
-			{
-				return new RoslynAssembly(_compilation.Assembly);
 			}
 		}
 

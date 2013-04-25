@@ -54,11 +54,7 @@ namespace Run00.Versioning
 			if (compliation == null)
 				return null;
 
-			var assembly = compliation.Assembly;
-			if (assembly == null)
-				return null;
-
-			var attributes = assembly.GetAttributes().AsEnumerable();
+			var attributes = compliation.GetAttributes();
 			if (attributes == null)
 				return null;
 
@@ -78,10 +74,10 @@ namespace Run00.Versioning
 				return null;
 
 			var value = attribute.ConstructorArguments.ElementAt(0);
-			if (value.Value == null)
+			if (value == null)
 				return null;
 
-			return new Version(value.Value.ToString());
+			return new Version(value.ToString());
 		}
 	}
 }

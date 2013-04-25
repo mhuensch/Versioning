@@ -21,11 +21,11 @@ namespace Run00.Versioning.Roslyn
 			}
 		}
 
-		IEnumerable<IArgument> IAttribute.ConstructorArguments
+		IEnumerable<object> IAttribute.ConstructorArguments
 		{
 			get
 			{
-				return _attribute.ConstructorArguments.AsEnumerable().Select(a => new RoslynArgument(a));
+				return _attribute.ConstructorArguments.AsEnumerable().Select(a => a.Value);
 			}
 		}
 

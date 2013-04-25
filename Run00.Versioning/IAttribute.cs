@@ -6,6 +6,6 @@ namespace Run00.Versioning
 	public interface IAttribute
 	{
 		string AttributeClass { get; }
-		IEnumerable<IArgument> ConstructorArguments { get; }
+		IEnumerable<object> ConstructorArguments { get; }
 	}
 }

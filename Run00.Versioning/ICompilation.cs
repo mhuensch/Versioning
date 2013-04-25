@@ -4,7 +4,7 @@ namespace Run00.Versioning
 {
 	public interface ICompilation : IContractItem
 	{
-		IAssembly Assembly { get; }
+		IEnumerable<IAttribute> GetAttributes();
 		IEnumerable<ISyntaxTree> SyntaxTrees { get; }
 	}
 }

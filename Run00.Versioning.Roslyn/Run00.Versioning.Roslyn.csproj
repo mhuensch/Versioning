@@ -66,12 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RoslynArgument.cs" />
     <Compile Include="RoslynCompilation.cs" />
     <Compile Include="RoslynNamespace.cs" />
-    <Compile Include="RoslynProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoslynAssembly.cs" />
     <Compile Include="RoslynAttribute.cs" />
     <Compile Include="RoslynSolution.cs" />
     <Compile Include="RoslynSyntaxNode.cs" />
