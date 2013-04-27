@@ -57,7 +57,7 @@ namespace Run00.Versioning
 
 			if (original.IsCodeBlock)
 			{
-				if (((ISyntaxNode)original).IsEquivalentTo(((ISyntaxNode)compareTo)))
+				if (original.IsEquivalentTo(compareTo))
 					return new ContractChanges(original, compareTo, ContractChangeType.Cosmetic);
 				else
 					return new ContractChanges(original, compareTo, ContractChangeType.Refactor);

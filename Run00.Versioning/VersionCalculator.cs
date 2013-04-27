@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
 namespace Run00.Versioning
 {
@@ -20,9 +19,8 @@ namespace Run00.Versioning
 		{
 			Contract.Ensures(Contract.Result<SuggestedVersion>() != null);
 
-			var originalVersion = GetVersion(changes.Original != null ? changes.Original : changes.ComparedTo);
-			if (originalVersion == null)
-				originalVersion = new Version("0.0.0.0");
+			var rawVersion = changes.Original != null ? changes.Original.GetVersion() : changes.ComparedTo.GetVersion();
+			var originalVersion = rawVersion == null ? new Version("0.0.0.0") : new Version(rawVersion);
 
 			var suggested = new Version("0.0.0.0");
 			switch (changes.Changes.ChangeType)
@@ -49,35 +47,35 @@ namespace Run00.Versioning
 			return new SuggestedVersion(originalVersion, suggested, changes.Original, changes.ComparedTo, changes.Changes);
 		}
 
-		private static Version GetVersion(ICompilation compliation)
-		{
-			if (compliation == null)
-				return null;
+		//private static Version GetVersion(ICompilation compliation)
+		//{
+		//	if (compliation == null)
+		//		return null;
 
-			var attributes = compliation.GetAttributes();
-			if (attributes == null)
-				return null;
+		//	var attributes = compliation.GetAttributes();
+		//	if (attributes == null)
+		//		return null;
 
-			var attribute = default(IAttribute);
-			foreach (var a in attributes)
-			{
-				if (a == null || a.AttributeClass == null)
-					continue;
+		//	var attribute = default(IAttribute);
+		//	foreach (var a in attributes)
+		//	{
+		//		if (a == null || a.AttributeClass == null)
+		//			continue;
 
-				if (a.AttributeClass.Equals("AssemblyVersionAttribute") == false)
-					continue;
+		//		if (a.AttributeClass.Equals("AssemblyVersionAttribute") == false)
+		//			continue;
 
-				attribute = a;
-			}
+		//		attribute = a;
+		//	}
 
-			if (attribute == null || attribute.ConstructorArguments == null)
-				return null;
+		//	if (attribute == null || attribute.ConstructorArguments == null)
+		//		return null;
 
-			var value = attribute.ConstructorArguments.ElementAt(0);
-			if (value == null)
-				return null;
+		//	var value = attribute.ConstructorArguments.ElementAt(0);
+		//	if (value == null)
+		//		return null;
 
-			return new Version(value.ToString());
-		}
+		//	return new Version(value.ToString());
+		//}
 	}
 }

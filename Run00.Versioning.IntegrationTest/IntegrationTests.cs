@@ -114,19 +114,20 @@ namespace Run00.Versioning.IntegrationTest
 			Assert.AreEqual("1.0.1.0", result.Suggested.ToString());
 		}
 
-		//[TestMethod, CategorizeByConvention]
-		//public void WhenChangingVersion_ShouldReturnTrue()
-		//{
-		//	//Arrange
-		//	var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
-		//	var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample.sln"));
-		//	var versions = VersionCalculator.SuggestVersions(controlGroup, testGroup);
+		[TestMethod, CategorizeByConvention]
+		public void WhenChangingVersion_ShouldReturnTrue()
+		{
+			//Arrange
+			var controlGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ControlGroup\Test.Sample.sln"));
+			var testGroup = RoslynSolution.Load(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample.sln"));
+			var changes = VersionCompare.Compare(controlGroup, testGroup);
+			var result = VersionCalculator.Calculate(changes.First());
 
-		//	VersionSetter.UpdateAssemblyInfo(versions);
+			result.ComparedToComp.SetVersion(result.Suggested.ToString());
 
-		//	var contents = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample\Properties\AssemblyInfo.cs"));
-		//	Assert.AreNotEqual(-1, contents.IndexOf("[assembly: AssemblyVersion(\"2.0.0.0\")]"));
-		//	Assert.AreNotEqual(-1, contents.IndexOf("[assembly: AssemblyFileVersion(\"2.0.0.0\")]"));
-		//}
+			var contents = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), @"ChangeVersion\Test.Sample\Properties\AssemblyInfo.cs"));
+			Assert.AreNotEqual(-1, contents.IndexOf("[assembly: AssemblyVersion(\"2.0.0.0\")]"));
+			Assert.AreNotEqual(-1, contents.IndexOf("[assembly: AssemblyFileVersion(\"2.0.0.0\")]"));
+		}
 	}
 }

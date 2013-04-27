@@ -41,6 +41,16 @@ namespace Run00.Versioning.Roslyn
 			return ((IContractItem)this).Name.Equals(item.Name);
 		}
 
+		string IContractItem.ToFullString()
+		{
+			return _type.ToDisplayString();
+		}
+
+		bool IContractItem.IsEquivalentTo(IContractItem node)
+		{
+			return false;
+		}
+
 		private readonly INamedTypeSymbol _type;
 	}
 }

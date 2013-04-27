@@ -1,11 +1,13 @@
 ﻿using Roslyn.Compilers.Common;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Run00.Versioning.Roslyn
 {
-	public class RoslynCompilation : ICompilation, IContractItem
+	public class RoslynCompilation : ICompilation
 	{
 		public RoslynCompilation(CommonCompilation compilation)
 		{
@@ -14,17 +16,25 @@ namespace Run00.Versioning.Roslyn
 			_compilation = compilation;
 		}
 
-		IEnumerable<IAttribute> ICompilation.GetAttributes()
+		string ICompilation.GetVersion()
 		{
-			return _compilation.Assembly.GetAttributes().AsEnumerable().Select(a => new RoslynAttribute(a));
+			return (
+				from a in _compilation.Assembly.GetAttributes().AsEnumerable()
+				let ca = a.ConstructorArguments.FirstOrDefault()
+				where
+					a.AttributeClass.Name == "AssemblyVersionAttribute"
+					&& ca.Value != null
+				select ca.Value.ToString()
+			).SingleOrDefault();
 		}
 
-		IEnumerable<ISyntaxTree> ICompilation.SyntaxTrees
+		void ICompilation.SetVersion(string value)
 		{
-			get
-			{
-				return _compilation.SyntaxTrees.Select(t => new RoslynSyntaxTree(t));
-			}
+			var syntaxTree = _compilation.SyntaxTrees.Where(t => Path.GetFileName(t.FilePath).Equals(_assemblyFileName)).Single();
+			var contents = syntaxTree.GetRoot().ToFullString();
+			var newContents = Regex.Replace(contents, _assemblyRegexPattern, "[assembly: AssemblyVersion(\"" + value + "\")]");
+			newContents = Regex.Replace(newContents, _assemblyFileRegexPattern, "[assembly: AssemblyFileVersion(\"" + value + "\")]");
+			File.WriteAllText(syntaxTree.FilePath, newContents);
 		}
 
 		bool IContractItem.IsPrivate { get { return false; } }
@@ -50,6 +60,20 @@ namespace Run00.Versioning.Roslyn
 			return ((IContractItem)this).Name.Equals(item.Name);
 		}
 
+		string IContractItem.ToFullString()
+		{
+			return _compilation.ToString();
+		}
+
+		bool IContractItem.IsEquivalentTo(IContractItem node)
+		{
+			return false;
+		}
+
 		private readonly CommonCompilation _compilation;
+		private const string _assemblyFileName = @"AssemblyInfo.cs";
+		private const string _assemblyRegexPattern = @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+		private const string _assemblyFileRegexPattern = @"\[assembly\: AssemblyFileVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]";
+
 	}
 }

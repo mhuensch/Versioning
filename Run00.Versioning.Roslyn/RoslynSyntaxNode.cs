@@ -6,61 +6,11 @@ using System.Linq;
 
 namespace Run00.Versioning.Roslyn
 {
-	public class RoslynSyntaxNode : ISyntaxNode, IContractItem
+	public class RoslynSyntaxNode : IContractItem
 	{
 		public RoslynSyntaxNode(CommonSyntaxNode node)
 		{
 			_node = node;
-		}
-
-		string ISyntaxNode.ToFullString()
-		{
-			return _node.ToFullString();
-		}
-
-		IEnumerable<ISyntaxNode> ISyntaxNode.ChildNodes()
-		{
-			return _node.ChildNodes().Select(c => new RoslynSyntaxNode(c));
-		}
-
-		bool ISyntaxNode.IsEquivalentTo(ISyntaxNode node)
-		{
-			var privateNode = node as RoslynSyntaxNode;
-			if (privateNode == null)
-				return false;
-
-			return _node.IsEquivalentTo(privateNode._node, false);
-		}
-
-		string ISyntaxNode.GetIdentifierName()
-		{
-			if (_node == null)
-				return null;
-
-			object value;
-			switch (((SyntaxNode)_node).Kind)
-			{
-				case SyntaxKind.ClassDeclaration:
-					value = ((ClassDeclarationSyntax)(_node)).Identifier.Value;
-					break;
-				case SyntaxKind.InterfaceDeclaration:
-					value = ((InterfaceDeclarationSyntax)(_node)).Identifier.Value;
-					break;
-				case SyntaxKind.StructDeclaration:
-					value = ((StructDeclarationSyntax)(_node)).Identifier.Value;
-					break;
-				case SyntaxKind.EnumDeclaration:
-					value = ((EnumDeclarationSyntax)(_node)).Identifier.Value;
-					break;
-				default:
-					value = null;
-					break;
-			}
-
-			if (value == null)
-				return null;
-
-			return value.ToString();
 		}
 
 		bool IContractItem.IsPrivate
@@ -130,6 +80,20 @@ namespace Run00.Versioning.Roslyn
 				return true;
 
 			return ((IContractItem)this).Name.Equals(item.Name);
+		}
+
+		string IContractItem.ToFullString()
+		{
+			return _node.ToFullString();
+		}
+
+		bool IContractItem.IsEquivalentTo(IContractItem node)
+		{
+			var privateNode = node as RoslynSyntaxNode;
+			if (privateNode == null)
+				return false;
+
+			return _node.IsEquivalentTo(privateNode._node, false);
 		}
 
 		private readonly CommonSyntaxNode _node;

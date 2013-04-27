@@ -69,10 +69,8 @@
     <Compile Include="RoslynCompilation.cs" />
     <Compile Include="RoslynNamespace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoslynAttribute.cs" />
     <Compile Include="RoslynSolution.cs" />
     <Compile Include="RoslynSyntaxNode.cs" />
-    <Compile Include="RoslynSyntaxTree.cs" />
     <Compile Include="RoslynType.cs" />
   </ItemGroup>
   <ItemGroup>
