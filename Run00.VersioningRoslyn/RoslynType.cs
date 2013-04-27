@@ -1,8 +1,9 @@
 ﻿using Roslyn.Compilers.Common;
+using Run00.Versioning;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Run00.Versioning.Roslyn
+namespace Run00.VersioningRoslyn
 {
 	public class RoslynType : IContractItem
 	{

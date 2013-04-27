@@ -6,8 +6,8 @@
     <ProjectGuid>{AF6001CA-3957-4DE1-993C-179DB119C79C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Run00.Versioning.IntegrationTest</RootNamespace>
-    <AssemblyName>Run00.Versioning.IntegrationTest</AssemblyName>
+    <RootNamespace>Run00.VersioningRoslyn.IntegrationTest</RootNamespace>
+    <AssemblyName>Run00.VersioningRoslyn.IntegrationTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -160,9 +160,9 @@
       <Project>{6887b2b9-7b3b-45c7-a025-1f7a4b25e838}</Project>
       <Name>Run00.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Run00.Versioning.Roslyn\Run00.Versioning.Roslyn.csproj">
+    <ProjectReference Include="..\Run00.VersioningRoslyn\Run00.VersioningRoslyn.csproj">
       <Project>{4acaeff7-5a65-4a6c-b239-87daa8d96a90}</Project>
-      <Name>Run00.Versioning.Roslyn</Name>
+      <Name>Run00.VersioningRoslyn</Name>
     </ProjectReference>
     <ProjectReference Include="..\Run00.Versioning\Run00.Versioning.csproj">
       <Project>{a75ff0ca-3aa8-4fc4-843a-6d63d2da0fd2}</Project>

@@ -1,10 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Run00.MsTest;
-using Run00.Versioning.Roslyn;
+using Run00.Versioning;
+using Run00.VersioningRoslyn;
 using System.IO;
 using System.Linq;
 
-namespace Run00.Versioning.IntegrationTest
+namespace Run00.VersioningRoslyn.IntegrationTest
 {
 	[TestClass, CategorizeByConventionClass(typeof(IntegrationTests))]
 	[DeploymentItem(@"..\..\Artifacts")]

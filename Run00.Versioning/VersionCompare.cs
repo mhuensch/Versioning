@@ -18,7 +18,7 @@ namespace Run00.Versioning
 		/// <exception cref="System.InvalidOperationException">Original.Projects and Compare.Projects to can not be null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Checked by code contracts.")]
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Checked by code contracts.")]
-		public static IEnumerable<CompilationChanges> Compare(ISolution original, ISolution compareTo)
+		public static IEnumerable<CompilationChanges> Compare(ICSharpSolution original, ICSharpSolution compareTo)
 		{
 			Contract.Requires(original != null);
 			Contract.Requires(compareTo != null);

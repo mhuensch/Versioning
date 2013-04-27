@@ -1,10 +1,11 @@
 ﻿using Roslyn.Compilers.Common;
 using Roslyn.Compilers.CSharp;
+using Run00.Versioning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Run00.Versioning.Roslyn
+namespace Run00.VersioningRoslyn
 {
 	public class RoslynSyntaxNode : IContractItem
 	{

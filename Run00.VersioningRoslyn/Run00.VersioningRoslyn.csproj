@@ -7,8 +7,8 @@
     <ProjectGuid>{4ACAEFF7-5A65-4A6C-B239-87DAA8D96A90}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Run00.Versioning.Roslyn</RootNamespace>
-    <AssemblyName>Run00.Versioning.Roslyn</AssemblyName>
+    <RootNamespace>Run00.VersioningRoslyn</RootNamespace>
+    <AssemblyName>Run00.VersioningRoslyn</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

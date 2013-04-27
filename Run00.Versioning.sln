@@ -16,15 +16,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3F8DC9
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.Roslyn", "Run00.Versioning.Roslyn\Run00.Versioning.Roslyn.csproj", "{4ACAEFF7-5A65-4A6C-B239-87DAA8D96A90}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.Versioning.IntegrationTest", "Run00.Versioning.IntegrationTest\Run00.Versioning.IntegrationTest.csproj", "{AF6001CA-3957-4DE1-993C-179DB119C79C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".playlists", ".playlists", "{E41CF363-9E02-4445-ADF7-74F0BBE2AAA7}"
 	ProjectSection(SolutionItems) = preProject
 		playlists\Integration.playlist = playlists\Integration.playlist
 		playlists\UnitTest.playlist = playlists\UnitTest.playlist
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.VersioningRoslyn", "Run00.VersioningRoslyn\Run00.VersioningRoslyn.csproj", "{4ACAEFF7-5A65-4A6C-B239-87DAA8D96A90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.VersioningRoslyn.IntegrationTest", "Run00.VersioningRoslyn.IntegrationTest\Run00.VersioningRoslyn.IntegrationTest.csproj", "{AF6001CA-3957-4DE1-993C-179DB119C79C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run00.VersioningRoslyn.UnitTest", "Run00.VersioningRoslyn.UnitTest\Run00.VersioningRoslyn.UnitTest.csproj", "{34042034-78C6-49C7-99F0-DA67840AE32B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{AF6001CA-3957-4DE1-993C-179DB119C79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF6001CA-3957-4DE1-993C-179DB119C79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF6001CA-3957-4DE1-993C-179DB119C79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34042034-78C6-49C7-99F0-DA67840AE32B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34042034-78C6-49C7-99F0-DA67840AE32B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34042034-78C6-49C7-99F0-DA67840AE32B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34042034-78C6-49C7-99F0-DA67840AE32B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

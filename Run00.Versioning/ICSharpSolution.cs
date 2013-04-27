@@ -2,7 +2,7 @@
 
 namespace Run00.Versioning
 {
-	public interface ISolution
+	public interface ICSharpSolution
 	{
 		IEnumerable<ICompilation> Compilations { get; }
 	}

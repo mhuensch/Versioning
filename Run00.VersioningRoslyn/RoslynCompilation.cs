@@ -1,11 +1,12 @@
 ﻿using Roslyn.Compilers.Common;
+using Run00.Versioning;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Run00.Versioning.Roslyn
+namespace Run00.VersioningRoslyn
 {
 	public class RoslynCompilation : ICompilation
 	{
