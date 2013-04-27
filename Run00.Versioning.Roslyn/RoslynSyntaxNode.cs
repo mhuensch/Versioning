@@ -25,16 +25,11 @@ namespace Run00.Versioning.Roslyn
 
 		bool ISyntaxNode.IsEquivalentTo(ISyntaxNode node)
 		{
-			return ((ISyntaxNode)this).IsEquivalentTo(node, false);
-		}
-
-		bool ISyntaxNode.IsEquivalentTo(ISyntaxNode node, bool topLevel)
-		{
 			var privateNode = node as RoslynSyntaxNode;
 			if (privateNode == null)
 				return false;
 
-			return _node.IsEquivalentTo(privateNode._node, topLevel);
+			return _node.IsEquivalentTo(privateNode._node, false);
 		}
 
 		string ISyntaxNode.GetIdentifierName()
@@ -67,13 +62,6 @@ namespace Run00.Versioning.Roslyn
 
 			return value.ToString();
 		}
-
-		private readonly CommonSyntaxNode _node;
-
-
-
-
-
 
 		bool IContractItem.IsPrivate
 		{
@@ -134,5 +122,16 @@ namespace Run00.Versioning.Roslyn
 				}
 			}
 		}
+
+		bool IContractItem.IsMatchedWith(IContractItem item)
+		{
+			var privateNode = item as RoslynSyntaxNode;
+			if (privateNode != null && _node.IsEquivalentTo(privateNode._node, true))
+				return true;
+
+			return ((IContractItem)this).Name.Equals(item.Name);
+		}
+
+		private readonly CommonSyntaxNode _node;
 	}
 }

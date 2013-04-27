@@ -8,5 +8,6 @@ namespace Run00.Versioning
 		bool IsPrivate { get; }
 		bool IsCodeBlock { get; }
 		IEnumerable<IContractItem> Children { get; }
+		bool IsMatchedWith(IContractItem item);
 	}
 }

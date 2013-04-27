@@ -113,7 +113,6 @@
     <Compile Include="CompilationChanges.cs" />
     <Compile Include="ContractChanges.cs" />
     <Compile Include="VersionCompare.cs" />
-    <Compile Include="ExtensionsForIContractItem.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ContractChangeType.cs" />
     <Compile Include="IAttribute.cs" />

@@ -11,10 +11,6 @@ namespace Run00.Versioning.Roslyn
 			_type = type;
 		}
 
-		private readonly INamedTypeSymbol _type;
-
-
-
 		bool IContractItem.IsPrivate
 		{
 			get
@@ -39,5 +35,12 @@ namespace Run00.Versioning.Roslyn
 		{
 			get { return _type.ToDisplayString(); }
 		}
+
+		bool IContractItem.IsMatchedWith(IContractItem item)
+		{
+			return ((IContractItem)this).Name.Equals(item.Name);
+		}
+
+		private readonly INamedTypeSymbol _type;
 	}
 }

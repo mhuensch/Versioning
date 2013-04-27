@@ -14,11 +14,6 @@ namespace Run00.Versioning.Roslyn
 			_namespace = namespaceSymbol;
 		}
 
-
-		private readonly INamespaceSymbol _namespace;
-
-
-
 		bool IContractItem.IsPrivate { get { return false; } }
 
 		bool IContractItem.IsCodeBlock { get { return false; } }
@@ -36,5 +31,12 @@ namespace Run00.Versioning.Roslyn
 		{
 			get { return _namespace.Name; }
 		}
+
+		bool IContractItem.IsMatchedWith(IContractItem item)
+		{
+			return ((IContractItem)this).Name.Equals(item.Name);
+		}
+
+		private readonly INamespaceSymbol _namespace;
 	}
 }

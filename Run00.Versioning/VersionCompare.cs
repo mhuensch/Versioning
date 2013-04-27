@@ -27,7 +27,7 @@ namespace Run00.Versioning
 
 			return original.Compilations.FullOuterJoin(
 				compareTo.Compilations,
-				(a, b) => a.CanBeMatchedWith(b),
+				(a, b) => IsMatchedWith(a, b),
 				(o, c) => new CompilationChanges(o, c, GetContractChanges(o, c))
 			);
 		}
@@ -67,9 +67,17 @@ namespace Run00.Versioning
 			if (original.Children.Count() == 0 && compareTo.Children.Count() == 0)
 				return new ContractChanges(original, compareTo, ContractChangeType.None);
 
-			var nodeChanges = original.Children.FullOuterJoin(compareTo.Children, (a, b) => a.CanBeMatchedWith(b), (o, c) => GetContractChanges(o, c));
+			var nodeChanges = original.Children.FullOuterJoin(compareTo.Children, (a, b) => IsMatchedWith(a, b), (o, c) => GetContractChanges(o, c));
 			var maxChange = nodeChanges.Max(n => n.ChangeType);
 			return new ContractChanges(original, compareTo, nodeChanges, maxChange);
+		}
+
+		private static bool IsMatchedWith(IContractItem original, IContractItem compareTo)
+		{
+			if (original == null || compareTo == null)
+				return false;
+
+			return original.IsMatchedWith(compareTo);
 		}
 	}
 }

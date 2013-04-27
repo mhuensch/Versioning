@@ -7,7 +7,6 @@ namespace Run00.Versioning
 		string ToFullString();
 		IEnumerable<ISyntaxNode> ChildNodes();
 		bool IsEquivalentTo(ISyntaxNode node);
-		bool IsEquivalentTo(ISyntaxNode node, bool topLevel);
 		string GetIdentifierName();
 	}
 }

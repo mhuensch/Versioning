@@ -45,6 +45,11 @@ namespace Run00.Versioning.Roslyn
 			get { return _compilation.GlobalNamespace.Name; }
 		}
 
+		bool IContractItem.IsMatchedWith(IContractItem item)
+		{
+			return ((IContractItem)this).Name.Equals(item.Name);
+		}
+
 		private readonly CommonCompilation _compilation;
 	}
 }
