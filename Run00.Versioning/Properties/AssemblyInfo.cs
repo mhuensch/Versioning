@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Run00.Versioning")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Run00.Versioning contains contracts used to abstract the calculation of versions between two solutions.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Run00")]
 [assembly: AssemblyProduct("Run00.Versioning")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
